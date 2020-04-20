@@ -57,4 +57,40 @@ public class JaggedArrayIteratorTest {
         it.next();
         it.next();
     }
+
+    @Test
+    public void whenMatrixHaveEmptyArrayThenNotProblem() {
+        it = new MatrixIterator(new int[][]{
+                {},
+                {},
+                {1},
+        });
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(1));
+        assertThat(it.hasNext(), is(false));
+    }
+
+    @Test
+    public void whenMatrixHaveOneEmptyArrayThenNotProblem() {
+        it = new MatrixIterator(new int[][]{
+                {},
+                {1, 2},
+                {},
+                {},
+                {3},
+                {}
+        });
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(1));
+        assertThat(it.next(), is(2));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(3));
+        assertThat(it.hasNext(), is(false));
+    }
+
+    @Test
+    public void whenMatrixEmptyArrayThenHasNextFalse() {
+        it = new MatrixIterator(new int[][]{});
+        assertThat(it.hasNext(), is(false));
+    }
 }
