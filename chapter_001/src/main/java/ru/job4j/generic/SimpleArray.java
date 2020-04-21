@@ -41,7 +41,8 @@ public class SimpleArray<T> {
      * @param index индекс.
      */
     public void remove(int index) {
-        // todo remove element from index
+        System.arraycopy(elements, index + 1, elements, index, elements.length - index - 1);
+        elements[--position] = null;
     }
 
     /**

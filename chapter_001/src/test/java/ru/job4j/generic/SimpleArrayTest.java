@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Класс для тестирования обертки над массивом с использованием generic.
@@ -61,9 +62,10 @@ public class SimpleArrayTest {
         sa.add(2);
         sa.add(3);
         sa.remove(1);
-        sa.add(4);
         assertThat(sa.get(0), is(1));
         assertThat(sa.get(1), is(3));
+        assertThat(sa.get(2), nullValue());
+        sa.add(4);
         assertThat(sa.get(2), is(4));
     }
 }
