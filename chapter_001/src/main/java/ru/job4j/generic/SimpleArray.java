@@ -35,6 +35,9 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param model элемент.
      */
     public void set(int index, T model) {
+        if (index >= position) {
+            throw new IndexOutOfBoundsException();
+        }
         elements[index] = model;
     }
 
@@ -44,6 +47,9 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param index индекс.
      */
     public void remove(int index) {
+        if (index >= position) {
+            throw new IndexOutOfBoundsException();
+        }
         System.arraycopy(elements, index + 1, elements, index, elements.length - index - 1);
         elements[--position] = null;
     }
@@ -56,6 +62,9 @@ public class SimpleArray<T> implements Iterable<T> {
      */
     @SuppressWarnings("unchecked")
     public T get(int index) {
+        if (index >= position) {
+            throw new IndexOutOfBoundsException();
+        }
         return (T) elements[index];
     }
 
