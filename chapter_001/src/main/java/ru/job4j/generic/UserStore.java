@@ -15,7 +15,7 @@ public class UserStore implements Store<User> {
      */
     @Override
     public void add(User model) {
-
+        store.add(model);
     }
 
     /**
@@ -27,7 +27,7 @@ public class UserStore implements Store<User> {
      */
     @Override
     public boolean replace(String id, User model) {
-        return false;
+        return store.replace(id, model);
     }
 
     /**
@@ -38,7 +38,7 @@ public class UserStore implements Store<User> {
      */
     @Override
     public boolean delete(String id) {
-        return false;
+        return store.delete(id);
     }
 
     /**
@@ -49,6 +49,6 @@ public class UserStore implements Store<User> {
      */
     @Override
     public User findById(String id) {
-        return null;
+        return store.findById(id);
     }
 }
