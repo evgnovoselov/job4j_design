@@ -15,7 +15,7 @@ public class JaggedArrayIteratorTest {
 
     @Before
     public void setUp() {
-        it = new MatrixIterator(new int[][]{{1}, {3, 4}, {7}});
+        it = new MatrixIt(new int[][]{{1}, {3, 4}, {7}});
     }
 
     @Test
@@ -51,7 +51,7 @@ public class JaggedArrayIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void whenNotHaveNextElementThenException() {
-        it = new MatrixIterator(new int[][]{
+        it = new MatrixIt(new int[][]{
                 {1},
         });
         it.next();
@@ -60,7 +60,7 @@ public class JaggedArrayIteratorTest {
 
     @Test
     public void whenMatrixHaveEmptyArrayThenNotProblem() {
-        it = new MatrixIterator(new int[][]{
+        it = new MatrixIt(new int[][]{
                 {},
                 {},
                 {1},
@@ -72,7 +72,7 @@ public class JaggedArrayIteratorTest {
 
     @Test
     public void whenMatrixHaveOneEmptyArrayThenNotProblem() {
-        it = new MatrixIterator(new int[][]{
+        it = new MatrixIt(new int[][]{
                 {},
                 {1, 2},
                 {},
@@ -90,7 +90,7 @@ public class JaggedArrayIteratorTest {
 
     @Test
     public void whenMatrixEmptyArrayThenHasNextFalse() {
-        it = new MatrixIterator(new int[][]{});
+        it = new MatrixIt(new int[][]{});
         assertThat(it.hasNext(), is(false));
     }
 
@@ -99,7 +99,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {1}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.next(), is(1));
     }
 
@@ -108,7 +108,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {}, {1}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.next(), is(1));
     }
 
@@ -117,7 +117,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {}, {1}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.hasNext(), is(true));
     }
 
@@ -126,7 +126,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {1}, {2, 3}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.next(), is(1));
         assertThat(it.next(), is(2));
         assertThat(it.next(), is(3));
@@ -137,7 +137,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {1}, {}, {}, {}, {2}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.next(), is(1));
         assertThat(it.next(), is(2));
     }
@@ -147,7 +147,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.hasNext(), is(false));
     }
 
@@ -156,7 +156,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         it.next();
     }
 
@@ -165,7 +165,7 @@ public class JaggedArrayIteratorTest {
         int[][] in = {
                 {}, {1}
         };
-        MatrixIterator it = new MatrixIterator(in);
+        MatrixIt it = new MatrixIt(in);
         assertThat(it.hasNext(), is(true));
         assertThat(it.hasNext(), is(true));
     }
