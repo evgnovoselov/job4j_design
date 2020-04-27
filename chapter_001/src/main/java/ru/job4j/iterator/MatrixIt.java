@@ -3,13 +3,13 @@ package ru.job4j.iterator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class MatrixIterator implements Iterator<Integer> {
+public class MatrixIt implements Iterator<Integer> {
     private final int[][] values;
     private int row = -1;
     private int col = -1;
     private boolean hasNextItem = false;
 
-    public MatrixIterator(int[][] values) {
+    public MatrixIt(int[][] values) {
         this.values = values;
     }
 
