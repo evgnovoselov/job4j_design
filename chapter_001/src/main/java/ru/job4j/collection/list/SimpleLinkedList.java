@@ -45,7 +45,7 @@ public class SimpleLinkedList<E> implements Iterable<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private Node<E> node = head;
             private final int expectedModCount = modCount;
 
