@@ -1,5 +1,7 @@
 package ru.job4j.collection.list;
 
+import java.util.Objects;
+
 /**
  * Простой связный список.
  *
@@ -7,15 +9,30 @@ package ru.job4j.collection.list;
  */
 public class SimpleLinkedList<E> {
     private Node<E> head;
-    private int index = 0;
+    private int size = 0;
     private int modCount = 0;
 
     public void add(E value) {
-
+        modCount++;
+        size++;
+        if (head == null) {
+            head = new Node<>(value, null);
+        } else {
+            Node<E> tail = head;
+            while (tail.next != null) {
+                tail = tail.next;
+            }
+            tail.next = new Node<>(value, null);
+        }
     }
 
     public E get(int index) {
-        return null;
+        Objects.checkIndex(index, size);
+        Node<E> resultNode = head;
+        for (int i = 0; i < index; i++) {
+            resultNode = resultNode.next;
+        }
+        return resultNode.value;
     }
 
     private static class Node<E> {

@@ -11,12 +11,27 @@ import static org.hamcrest.Matchers.is;
  * @author Evgeny Novoselov
  */
 public class SimpleLinkedListTest {
+    /**
+     * Тестируем получение элементов по индексу.
+     */
     @Test
     public void whenAddItemsThinHaveItems() {
         SimpleLinkedList<Integer> list = new SimpleLinkedList<>();
         list.add(1);
         list.add(2);
+        list.add(3);
         assertThat(list.get(0), is(1));
         assertThat(list.get(1), is(2));
+        assertThat(list.get(2), is(3));
+    }
+
+    /**
+     * Тестируем ошибку на неверный индекс.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void whenGetBadIndexThinError() {
+        SimpleLinkedList<Integer> list = new SimpleLinkedList<>();
+        list.add(1);
+        list.get(7);
     }
 }
