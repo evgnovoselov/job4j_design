@@ -1,5 +1,8 @@
 package ru.job4j.collection.list;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -7,7 +10,7 @@ import java.util.Objects;
  *
  * @author Evgeny Novoselov.
  */
-public class SimpleLinkedList<E> {
+public class SimpleLinkedList<E> implements Iterable<E> {
     private Node<E> head;
     private int size = 0;
     private int modCount = 0;
@@ -33,6 +36,37 @@ public class SimpleLinkedList<E> {
             resultNode = resultNode.next;
         }
         return resultNode.value;
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            private Node<E> node = head;
+            private final int expectedModCount = modCount;
+
+            @Override
+            public boolean hasNext() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                return node != null;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                E elem = node.value;
+                node = node.next;
+                return elem;
+            }
+        };
     }
 
     private static class Node<E> {
