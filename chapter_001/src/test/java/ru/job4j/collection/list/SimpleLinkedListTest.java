@@ -15,7 +15,7 @@ public class SimpleLinkedListTest {
      * Тестируем получение элементов по индексу.
      */
     @Test
-    public void whenAddItemsThinHaveItems() {
+    public void whenAddItemsThenHaveItems() {
         SimpleLinkedList<Integer> list = new SimpleLinkedList<>();
         list.add(1);
         list.add(2);
@@ -29,7 +29,7 @@ public class SimpleLinkedListTest {
      * Тестируем ошибку на неверный индекс.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void whenGetBadIndexThinError() {
+    public void whenGetBadIndexThenError() {
         SimpleLinkedList<Integer> list = new SimpleLinkedList<>();
         list.add(1);
         list.get(7);
