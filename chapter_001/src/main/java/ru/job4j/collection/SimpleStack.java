@@ -9,12 +9,7 @@ public class SimpleStack<T> {
     private ForwardLinked<T> linked = new ForwardLinked<T>();
 
     public T pop() {
-        T elem = null;
-        for (T value : linked) {
-            elem = value;
-        }
-        linked.deleteLast();
-        return elem;
+        return linked.deleteLast();
     }
 
     public void push(T value) {
