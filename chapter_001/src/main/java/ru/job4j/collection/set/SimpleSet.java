@@ -1,0 +1,35 @@
+package ru.job4j.collection.set;
+
+import ru.job4j.collection.SimpleArray;
+
+import java.util.Iterator;
+
+/**
+ * Простое множество.
+ */
+public class SimpleSet<E> implements Iterable<E> {
+    private final SimpleArray<E> data = new SimpleArray<>();
+
+    void add(E e) {
+        boolean isEq = true;
+        for (E value : data) {
+            if (e.equals(value)) {
+                isEq = false;
+                break;
+            }
+        }
+        if (isEq) {
+            data.add(e);
+        }
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return data.iterator();
+    }
+}
