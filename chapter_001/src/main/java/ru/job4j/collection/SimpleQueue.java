@@ -9,24 +9,24 @@ package ru.job4j.collection;
 public class SimpleQueue<T> {
     private final SimpleStack<T> in = new SimpleStack<>();
     private final SimpleStack<T> out = new SimpleStack<>();
-    private int size = 0;
+    private int sizeIn = 0;
+    private int sizeOut = 0;
 
     public T poll() {
-        moveElements(in, out);
+        if (sizeOut == 0) {
+            for (int i = 0; i < sizeIn; i++) {
+                out.push(in.pop());
+            }
+            sizeOut = sizeIn;
+            sizeIn = 0;
+        }
         T elem = out.pop();
-        size--;
-        moveElements(out, in);
+        sizeOut--;
         return elem;
     }
 
     public void push(T value) {
-        size++;
+        sizeIn++;
         in.push(value);
-    }
-
-    private void moveElements(SimpleStack<T> from, SimpleStack<T> to) {
-        for (int i = 0; i < size; i++) {
-            to.push(from.pop());
-        }
     }
 }
