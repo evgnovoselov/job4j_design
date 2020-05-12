@@ -60,7 +60,11 @@ public class ForwardLinked<T> implements Iterable<T> {
      * Переворачиваем односвязный список.
      */
     public void revert() {
-        //TODO impl reverts of linked list.
+        Node<T> revert = null;
+        for (T value : this) {
+            revert = new Node<>(value, revert);
+        }
+        head = revert;
     }
 
     @Override
