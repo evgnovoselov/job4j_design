@@ -56,6 +56,17 @@ public class ForwardLinked<T> implements Iterable<T> {
         return elem;
     }
 
+    /**
+     * Переворачиваем односвязный список.
+     */
+    public void revert() {
+        Node<T> revert = null;
+        for (T value : this) {
+            revert = new Node<>(value, revert);
+        }
+        head = revert;
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
