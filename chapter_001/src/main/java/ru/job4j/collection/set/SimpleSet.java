@@ -11,14 +11,7 @@ public class SimpleSet<E> implements Iterable<E> {
     private final SimpleArray<E> data = new SimpleArray<>();
 
     void add(E e) {
-        boolean isEq = true;
-        for (E value : data) {
-            if (e.equals(value)) {
-                isEq = false;
-                break;
-            }
-        }
-        if (isEq) {
+        if (contains(e)) {
             data.add(e);
         }
     }
@@ -31,5 +24,16 @@ public class SimpleSet<E> implements Iterable<E> {
     @Override
     public Iterator<E> iterator() {
         return data.iterator();
+    }
+
+    private boolean contains(E e) {
+        boolean isEq = true;
+        for (E value : data) {
+            if (e.equals(value)) {
+                isEq = false;
+                break;
+            }
+        }
+        return isEq;
     }
 }
