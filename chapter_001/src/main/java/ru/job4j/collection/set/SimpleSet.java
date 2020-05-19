@@ -11,7 +11,7 @@ public class SimpleSet<E> implements Iterable<E> {
     private final SimpleArray<E> data = new SimpleArray<>();
 
     void add(E e) {
-        if (contains(e)) {
+        if (!contains(e)) {
             data.add(e);
         }
     }
@@ -27,13 +27,13 @@ public class SimpleSet<E> implements Iterable<E> {
     }
 
     private boolean contains(E e) {
-        boolean isEq = true;
+        boolean isContains = false;
         for (E value : data) {
             if (e.equals(value)) {
-                isEq = false;
+                isContains = true;
                 break;
             }
         }
-        return isEq;
+        return isContains;
     }
 }
