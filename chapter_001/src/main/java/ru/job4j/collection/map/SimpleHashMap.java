@@ -1,11 +1,13 @@
 package ru.job4j.collection.map;
 
+import java.util.Iterator;
+
 /**
  * Реализация простой хэш-карты.
  *
  * @author Evgeny Novoselov
  */
-public class SimpleHashMap<K, V> {
+public class SimpleHashMap<K, V> implements Iterable<V> {
     /**
      * Добавляем элемент в карту.
      *
@@ -35,5 +37,25 @@ public class SimpleHashMap<K, V> {
      */
     public boolean delete(K key) {
         return false;
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<V> iterator() {
+        return new Iterator<V>() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public V next() {
+                return null;
+            }
+        };
     }
 }
