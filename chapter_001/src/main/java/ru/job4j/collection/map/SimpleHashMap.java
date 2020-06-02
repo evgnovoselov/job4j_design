@@ -8,6 +8,8 @@ import java.util.Iterator;
  * @author Evgeny Novoselov
  */
 public class SimpleHashMap<K, V> implements Iterable<V> {
+    private Node[] table = new Node[16];
+
     /**
      * Добавляем элемент в карту.
      *
@@ -16,7 +18,13 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
      * @return Результат добавления элемента.
      */
     public boolean insert(K key, V value) {
-        return false;
+        boolean result = false;
+        int position = key.hashCode() % table.length;
+        if (table[position] == null) {
+            table[position] = new Node<>(key, value);
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -57,5 +65,15 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
                 return null;
             }
         };
+    }
+
+    private static class Node<K, V> {
+        K key;
+        V value;
+
+        public Node(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }
