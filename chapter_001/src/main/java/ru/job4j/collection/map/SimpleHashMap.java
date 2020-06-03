@@ -28,7 +28,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         boolean result = false;
         int position = getPosition(key);
         if (table[position] == null) {
-            if (countElements > table.length * 0.5) {
+            if (countElements > table.length * 0.75) {
                 resize();
             }
             modCount++;
@@ -51,8 +51,10 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         @SuppressWarnings("unchecked")
         Node<K, V>[] newTable = (Node<K, V>[]) new Node[table.length * 2];
         for (Node<K, V> elem : table) {
-            int newPosition = getPosition(elem.key, newTable.length);
-            newTable[newPosition] = elem;
+            if (elem != null) {
+                int newPosition = getPosition(elem.key, newTable.length);
+                newTable[newPosition] = elem;
+            }
         }
         table = newTable;
     }
