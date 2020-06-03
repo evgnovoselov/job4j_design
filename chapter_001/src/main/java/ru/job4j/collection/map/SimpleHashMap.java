@@ -8,7 +8,8 @@ import java.util.Iterator;
  * @author Evgeny Novoselov
  */
 public class SimpleHashMap<K, V> implements Iterable<V> {
-    private Node[] table = new Node[16];
+    @SuppressWarnings("unchecked")
+    private Node<K, V>[] table = (Node<K, V>[]) new Node[16];
 
     /**
      * Добавляем элемент в карту.
@@ -19,12 +20,16 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
      */
     public boolean insert(K key, V value) {
         boolean result = false;
-        int position = key.hashCode() % table.length;
+        int position = getPosition(key);
         if (table[position] == null) {
             table[position] = new Node<>(key, value);
             result = true;
         }
         return result;
+    }
+
+    private int getPosition(K key) {
+        return key.hashCode() % table.length;
     }
 
     /**
@@ -34,7 +39,8 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
      * @return Значение по ключу.
      */
     public V get(K key) {
-        return null;
+        int position = getPosition(key);
+        return table[position] != null ? table[position].value : null;
     }
 
     /**
