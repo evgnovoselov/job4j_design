@@ -1,6 +1,8 @@
 package ru.job4j.collection.map;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Реализация простой хэш-карты.
@@ -8,8 +10,11 @@ import java.util.Iterator;
  * @author Evgeny Novoselov
  */
 public class SimpleHashMap<K, V> implements Iterable<V> {
+
     @SuppressWarnings("unchecked")
     private Node<K, V>[] table = (Node<K, V>[]) new Node[16];
+
+    private int modCount = 0;
 
     /**
      * Добавляем элемент в карту.
@@ -22,6 +27,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         boolean result = false;
         int position = getPosition(key);
         if (table[position] == null) {
+            modCount++;
             table[position] = new Node<>(key, value);
             result = true;
         }
@@ -50,7 +56,14 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
      * @return Результат удаления.
      */
     public boolean delete(K key) {
-        return false;
+        boolean result = false;
+        int position = getPosition(key);
+        if (table[position] != null) {
+            modCount++;
+            table[position] = null;
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -61,14 +74,35 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
     @Override
     public Iterator<V> iterator() {
         return new Iterator<V>() {
+            private int index = -1;
+            private int nextIndex = -1;
+            private final int expectedModCount = modCount;
+
             @Override
             public boolean hasNext() {
-                return false;
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                return index < nextIndex || index != findNext();
             }
 
             @Override
             public V next() {
-                return null;
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                index = nextIndex;
+                return table[index].value;
+            }
+
+            private int findNext() {
+                for (int i = index + 1; i < table.length; i++) {
+                    if (table[i] != null) {
+                        nextIndex = i;
+                        break;
+                    }
+                }
+                return nextIndex;
             }
         };
     }
