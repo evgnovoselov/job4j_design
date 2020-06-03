@@ -15,6 +15,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
     private Node<K, V>[] table = (Node<K, V>[]) new Node[16];
 
     private int modCount = 0;
+    private int countElements = 0;
 
     /**
      * Добавляем элемент в карту.
@@ -27,7 +28,11 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         boolean result = false;
         int position = getPosition(key);
         if (table[position] == null) {
+            if (countElements > table.length * 0.5) {
+                resize();
+            }
             modCount++;
+            countElements++;
             table[position] = new Node<>(key, value);
             result = true;
         }
@@ -35,7 +40,21 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
     }
 
     private int getPosition(K key) {
-        return key.hashCode() % table.length;
+        return getPosition(key, table.length);
+    }
+
+    private int getPosition(K key, int length) {
+        return (length - 1) & (key.hashCode() ^ (key.hashCode() >>> 16));
+    }
+
+    private void resize() {
+        @SuppressWarnings("unchecked")
+        Node<K, V>[] newTable = (Node<K, V>[]) new Node[table.length * 2];
+        for (Node<K, V> elem : table) {
+            int newPosition = getPosition(elem.key, newTable.length);
+            newTable[newPosition] = elem;
+        }
+        table = newTable;
     }
 
     /**
@@ -60,6 +79,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         int position = getPosition(key);
         if (table[position] != null) {
             modCount++;
+            countElements--;
             table[position] = null;
             result = true;
         }
