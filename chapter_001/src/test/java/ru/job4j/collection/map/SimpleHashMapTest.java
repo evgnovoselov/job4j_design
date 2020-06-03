@@ -46,7 +46,7 @@ public class SimpleHashMapTest {
         shm.insert("one", 1);
         shm.insert("two", 2);
         assertThat(shm.delete("one"), is(true));
-        assertThat(shm.delete("three"), is(false));
+        assertThat(shm.delete("notHave"), is(false));
         shm.insert("one", 3);
         assertThat(shm.get("one"), is(3));
         assertThat(shm.get("two"), is(2));
