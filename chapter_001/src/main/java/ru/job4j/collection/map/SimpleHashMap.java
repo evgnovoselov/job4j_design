@@ -16,6 +16,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
 
     private int modCount = 0;
     private int countElements = 0;
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
     /**
      * Добавляем элемент в карту.
@@ -28,7 +29,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         boolean result = false;
         int position = getPosition(key);
         if (table[position] == null) {
-            if (countElements > table.length * 0.75) {
+            if (countElements > table.length * DEFAULT_LOAD_FACTOR) {
                 resize();
             }
             modCount++;
@@ -67,7 +68,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
      */
     public V get(K key) {
         int position = getPosition(key);
-        return table[position] != null ? table[position].value : null;
+        return table[position] != null && key.equals(table[position].key) ? table[position].value : null;
     }
 
     /**
@@ -79,7 +80,7 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
     public boolean delete(K key) {
         boolean result = false;
         int position = getPosition(key);
-        if (table[position] != null) {
+        if (table[position] != null && key.equals(table[position].key)) {
             modCount++;
             countElements--;
             table[position] = null;
