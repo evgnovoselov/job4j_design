@@ -43,4 +43,13 @@ public class Tree<E> implements SimpleTree<E> {
         }
         return rsl;
     }
+
+    /**
+     * Проверяем, что дерево бинарное.
+     *
+     * @return Бинарное ли дерево.
+     */
+    public boolean isBinary() {
+        return false;
+    }
 }
