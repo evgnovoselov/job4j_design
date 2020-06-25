@@ -43,4 +43,24 @@ public class Tree<E> implements SimpleTree<E> {
         }
         return rsl;
     }
+
+    /**
+     * Проверяем, что дерево бинарное.
+     *
+     * @return Бинарное ли дерево.
+     */
+    public boolean isBinary() {
+        boolean binary = true;
+        Queue<Node<E>> data = new LinkedList<>();
+        data.offer(this.root);
+        while (!data.isEmpty()) {
+            Node<E> el = data.poll();
+            if (el.children.size() > 2) {
+                binary = false;
+                break;
+            }
+            data.addAll(el.children);
+        }
+        return binary;
+    }
 }
