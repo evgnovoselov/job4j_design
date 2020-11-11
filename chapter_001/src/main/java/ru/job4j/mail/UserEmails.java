@@ -15,25 +15,28 @@ public class UserEmails {
     public static Map<String, Set<String>> merge(Map<String, Set<String>> userEmails) {
         var result = new HashMap<String, Set<String>>();
         var emailsUser = new HashMap<String, String>();
+        var emailsQueue = new LinkedList<String>();
         for (var userEmail : userEmails.entrySet()) {
             String userPrevious = null;
             for (var email : userEmail.getValue()) {
-                if ((userPrevious = emailsUser.get(email)) != null) {
-                    break;
+                if (userPrevious == null) {
+                    userPrevious = emailsUser.get(email);
                 }
+                emailsQueue.offer(email);
             }
             if (userPrevious == null) {
-                for (var email : userEmail.getValue()) {
-                    emailsUser.put(email, userEmail.getKey());
-                }
                 result.put(userEmail.getKey(), new HashSet<>(userEmail.getValue()));
-            } else {
-                Set<String> emails = new HashSet<>(userEmails.get(userPrevious));
-                for (var email : userEmail.getValue()) {
-                    emailsUser.putIfAbsent(email, userPrevious);
-                    emails.add(email);
+                while (!emailsQueue.isEmpty()) {
+                    emailsUser.put(emailsQueue.poll(), userEmail.getKey());
                 }
-                result.put(userPrevious, emails);
+            } else {
+                var emailsResult = result.get(userPrevious);
+                while (!emailsQueue.isEmpty()) {
+                    var email = emailsQueue.poll();
+                    emailsUser.putIfAbsent(email, userPrevious);
+                    emailsResult.add(email);
+                }
+                result.put(userPrevious, emailsResult);
             }
         }
         return result;
