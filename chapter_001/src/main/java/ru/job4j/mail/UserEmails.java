@@ -18,33 +18,23 @@ public class UserEmails {
         var emailsQueue = new LinkedList<String>();
         for (var userEmail : userEmails.entrySet()) {
             String userPrevious = null;
-            boolean hasEmailsUserPrevious = false;
-            Set<String> emailsResult = null;
             for (var email : userEmail.getValue()) {
                 if (userPrevious == null) {
                     userPrevious = emailsUser.get(email);
-                    emailsQueue.offer(email);
                 }
-                if (userPrevious != null && !hasEmailsUserPrevious) {
-                    emailsResult = result.get(userPrevious);
-                    hasEmailsUserPrevious = true;
-                }
-                if (userPrevious != null) {
-                    emailsResult.add(email);
-                    emailsUser.put(email, userPrevious);
-                }
+                emailsQueue.offer(email);
             }
             if (userPrevious == null) {
                 result.put(userEmail.getKey(), new HashSet<>(userEmail.getValue()));
                 while (!emailsQueue.isEmpty()) {
                     emailsUser.put(emailsQueue.poll(), userEmail.getKey());
                 }
-            }
-            if (userPrevious != null) {
+            } else {
+                var emailsResult = result.get(userPrevious);
                 while (!emailsQueue.isEmpty()) {
                     var email = emailsQueue.poll();
+                    emailsUser.putIfAbsent(email, userPrevious);
                     emailsResult.add(email);
-                    emailsUser.put(email, userPrevious);
                 }
                 result.put(userPrevious, emailsResult);
             }
