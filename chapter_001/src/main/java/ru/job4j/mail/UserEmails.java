@@ -31,6 +31,7 @@ public class UserEmails {
                 }
                 if (userPrevious != null) {
                     emailsResult.add(email);
+                    emailsUser.put(email, userPrevious);
                 }
             }
             if (userPrevious == null) {
