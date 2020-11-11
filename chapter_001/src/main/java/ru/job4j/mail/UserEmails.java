@@ -1,6 +1,9 @@
 package ru.job4j.mail;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Класс для работы с пользователями и их почтой.
@@ -15,24 +18,22 @@ public class UserEmails {
     public static Map<String, Set<String>> merge(Map<String, Set<String>> userEmails) {
         var result = new HashMap<String, Set<String>>();
         var emailsUser = new HashMap<String, String>();
-        var emailsQueue = new LinkedList<String>();
         for (var userEmail : userEmails.entrySet()) {
             String userPrevious = null;
             for (var email : userEmail.getValue()) {
-                if (userPrevious == null) {
-                    userPrevious = emailsUser.get(email);
+                userPrevious = emailsUser.get(email);
+                if (userPrevious != null) {
+                    break;
                 }
-                emailsQueue.offer(email);
             }
             if (userPrevious == null) {
                 result.put(userEmail.getKey(), new HashSet<>(userEmail.getValue()));
-                while (!emailsQueue.isEmpty()) {
-                    emailsUser.put(emailsQueue.poll(), userEmail.getKey());
+                for (var email : userEmail.getValue()) {
+                    emailsUser.put(email, userEmail.getKey());
                 }
             } else {
                 var emailsResult = result.get(userPrevious);
-                while (!emailsQueue.isEmpty()) {
-                    var email = emailsQueue.poll();
+                for (var email : userEmail.getValue()) {
                     emailsUser.putIfAbsent(email, userPrevious);
                     emailsResult.add(email);
                 }
