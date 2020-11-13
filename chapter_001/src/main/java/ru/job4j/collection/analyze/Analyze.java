@@ -13,13 +13,18 @@ public class Analyze {
      * @param current  текущий список.
      * @return разница.
      */
-    public Info diff(List<User> previous, List<User> current) {
+    public static Info diff(List<User> previous, List<User> current) {
         return null;
     }
 
     public static class User {
-        int id;
+        private static int counter;
+        int id = ++counter;
         String name;
+
+        public User(String name) {
+            this.name = name;
+        }
     }
 
     public static class Info {

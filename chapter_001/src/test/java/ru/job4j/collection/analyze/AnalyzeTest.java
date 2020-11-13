@@ -2,6 +2,9 @@ package ru.job4j.collection.analyze;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -14,7 +17,18 @@ public class AnalyzeTest {
      */
     @Test
     public void whenListAddNewUsersThenGetCountHowMuchAdd() {
-        assertThat(true, is(true));
+        var previous = List.of(
+                new Analyze.User("Veronika"),
+                new Analyze.User("Alex"),
+                new Analyze.User("Julia"),
+                new Analyze.User("Katya")
+        );
+        var current = new ArrayList<>(previous);
+        current.addAll(List.of(
+                new Analyze.User("Olga"),
+                new Analyze.User("Kristina")
+        ));
+        assertThat(Analyze.diff(previous, current), is(2));
     }
 
     /**
@@ -22,7 +36,16 @@ public class AnalyzeTest {
      */
     @Test
     public void whenListEditUsersThenGetCountHowMuchEdit() {
-        assertThat(true, is(true));
+        var previous = List.of(
+                new Analyze.User("Veronika"),
+                new Analyze.User("Alex"),
+                new Analyze.User("Julia"),
+                new Analyze.User("Katya")
+        );
+        var current = new ArrayList<>(previous);
+        current.get(1).name = "Olga";
+        current.get(2).name = "Kristina";
+        assertThat(Analyze.diff(previous, current), is(2));
     }
 
     /**
@@ -30,6 +53,15 @@ public class AnalyzeTest {
      */
     @Test
     public void whenListDeleteUsersThenGetCountHowMuchDelete() {
-        assertThat(true, is(true));
+        var previous = List.of(
+                new Analyze.User("Veronika"),
+                new Analyze.User("Alex"),
+                new Analyze.User("Julia"),
+                new Analyze.User("Katya")
+        );
+        var current = new ArrayList<>(previous);
+        current.remove(1);
+        current.remove(2);
+        assertThat(Analyze.diff(previous, current), is(2));
     }
 }
