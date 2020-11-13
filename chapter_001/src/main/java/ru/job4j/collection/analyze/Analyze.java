@@ -1,6 +1,5 @@
 package ru.job4j.collection.analyze;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,19 +16,17 @@ public class Analyze {
      */
     public static Info diff(List<User> previous, List<User> current) {
         int changed = 0;
-        var prevDif = new ArrayList<>(previous);
-        var curDif = new ArrayList<>(current);
-        for (int i = 0; i < curDif.size(); i++) {
-            int prevIndex = prevDif.indexOf(curDif.get(i));
+        var notChanged = 0;
+        for (var user : current) {
+            int prevIndex = previous.indexOf(user);
             if (prevIndex >= 0) {
-                if (!curDif.get(i).getName().equals(prevDif.get(prevIndex).getName())) {
+                if (!user.getName().equals(previous.get(prevIndex).getName())) {
                     changed++;
                 }
-                curDif.remove(i--);
-                prevDif.remove(prevIndex);
+                notChanged++;
             }
         }
-        return new Info(curDif.size(), changed, prevDif.size());
+        return new Info(current.size() - notChanged, changed, previous.size() - notChanged);
     }
 
     public static class User {
