@@ -16,7 +16,7 @@ public class Analyze {
      */
     public static Info diff(List<User> previous, List<User> current) {
         int changed = 0;
-        var comparedCounter = 0;
+        int comparedCounter = 0;
         for (var user : current) {
             int prevIndex = previous.indexOf(user);
             if (prevIndex >= 0) {
