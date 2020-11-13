@@ -16,17 +16,17 @@ public class Analyze {
      */
     public static Info diff(List<User> previous, List<User> current) {
         int changed = 0;
-        var notChanged = 0;
+        var comparedCounter = 0;
         for (var user : current) {
             int prevIndex = previous.indexOf(user);
             if (prevIndex >= 0) {
                 if (!user.getName().equals(previous.get(prevIndex).getName())) {
                     changed++;
                 }
-                notChanged++;
+                comparedCounter++;
             }
         }
-        return new Info(current.size() - notChanged, changed, previous.size() - notChanged);
+        return new Info(current.size() - comparedCounter, changed, previous.size() - comparedCounter);
     }
 
     public static class User {
