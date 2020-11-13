@@ -46,8 +46,12 @@ public class AnalyzeTest {
                 new Analyze.User("Katya")
         );
         var current = new ArrayList<>(previous);
-        current.get(1).setName("Olga");
-        current.get(2).setName("Kristina");
+        var user = new Analyze.User("Olga");
+        user.setId(current.get(1).getId());
+        current.set(1, user);
+        user = new Analyze.User("Kristina");
+        user.setId(current.get(2).getId());
+        current.set(2, user);
         var info = Analyze.diff(previous, current);
         assertThat(info.getAdded(), is(0));
         assertThat(info.getDeleted(), is(0));
@@ -83,17 +87,21 @@ public class AnalyzeTest {
                 new Analyze.User("Veronika"),
                 new Analyze.User("Alex"),
                 new Analyze.User("Julia"),
-                new Analyze.User("Katya")
+                new Analyze.User("Katya"),
+                new Analyze.User("Dasha"),
+                new Analyze.User("Nasty")
         );
         var current = new ArrayList<>(previous);
         current.addAll(List.of(
                 new Analyze.User("Olga"),
                 new Analyze.User("Kristina")
         ));
-        current.remove(1);
-        current.remove(2);
-        current.get(1).setName("Olga");
-        current.get(2).setName("Kristina");
+        current.remove(4);
+        current.remove(4);
+        var user = new Analyze.User(current.get(1).getId(), "Olga");
+        current.set(1, user);
+        user = new Analyze.User(current.get(2).getId(), "Kristina");
+        current.set(2, user);
         var info = Analyze.diff(previous, current);
         assertThat(info.getAdded(), is(2));
         assertThat(info.getDeleted(), is(2));
