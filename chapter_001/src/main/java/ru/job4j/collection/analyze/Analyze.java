@@ -15,7 +15,7 @@ public class Analyze {
      * @return разница.
      */
     public static Info diff(List<User> previous, List<User> current) {
-        return null;
+        return new Info(0, 0, 0);
     }
 
     public static class User {
