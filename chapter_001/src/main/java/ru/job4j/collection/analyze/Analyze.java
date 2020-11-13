@@ -16,14 +16,20 @@ public class Analyze {
      * @return разница.
      */
     public static Info diff(List<User> previous, List<User> current) {
-        var added = new ArrayList<>(current);
-        added.removeAll(previous);
-        var deleted = new ArrayList<>(previous);
-        deleted.removeAll(current);
-        var changed = new ArrayList<>(previous);
-        changed.retainAll(current);
-        changed.removeIf(user -> current.get(current.indexOf(user)).getName().equals(user.getName()));
-        return new Info(added.size(), changed.size(), deleted.size());
+        int changed = 0;
+        var prevDif = new ArrayList<>(previous);
+        var curDif = new ArrayList<>(current);
+        for (int i = 0; i < curDif.size(); i++) {
+            int prevIndex = prevDif.indexOf(curDif.get(i));
+            if (prevIndex >= 0) {
+                if (!curDif.get(i).getName().equals(prevDif.get(prevIndex).getName())) {
+                    changed++;
+                }
+                curDif.remove(i--);
+                prevDif.remove(prevIndex);
+            }
+        }
+        return new Info(curDif.size(), changed, prevDif.size());
     }
 
     public static class User {
@@ -58,8 +64,12 @@ public class Analyze {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             User user = (User) o;
             return id == user.id;
         }
