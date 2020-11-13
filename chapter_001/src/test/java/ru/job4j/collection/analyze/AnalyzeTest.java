@@ -43,8 +43,8 @@ public class AnalyzeTest {
                 new Analyze.User("Katya")
         );
         var current = new ArrayList<>(previous);
-        current.get(1).name = "Olga";
-        current.get(2).name = "Kristina";
+        current.get(1).setName("Olga");
+        current.get(2).setName("Kristina");
         assertThat(Analyze.diff(previous, current), is(2));
     }
 
