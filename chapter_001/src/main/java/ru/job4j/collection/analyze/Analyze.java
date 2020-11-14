@@ -2,6 +2,7 @@ package ru.job4j.collection.analyze;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Класс анализатора.
@@ -17,10 +18,11 @@ public class Analyze {
     public static Info diff(List<User> previous, List<User> current) {
         int changed = 0;
         int comparedCounter = 0;
+        var prev = previous.stream().collect(Collectors.toMap(User::getId, user -> user));
         for (var user : current) {
-            int prevIndex = previous.indexOf(user);
-            if (prevIndex >= 0) {
-                if (!user.getName().equals(previous.get(prevIndex).getName())) {
+            var prevUser = prev.get(user.getId());
+            if (prevUser != null) {
+                if (!user.getName().equals(prevUser.getName())) {
                     changed++;
                 }
                 comparedCounter++;
