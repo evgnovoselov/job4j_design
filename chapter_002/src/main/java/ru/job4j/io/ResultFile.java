@@ -7,18 +7,21 @@ import java.io.FileOutputStream;
  */
 public class ResultFile {
     public static void main(String[] args) {
-        int[][] multiple = Matrix.multiple(9, 9);
+        try (FileOutputStream out = new FileOutputStream("result.txt")) {
+            out.write(getMultiple(9).getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getMultiple(int size) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int[] row : multiple) {
+        for (int[] row : Matrix.multiple(size, size)) {
             for (int val : row) {
                 stringBuilder.append(val).append(" ");
             }
             stringBuilder.append("\n");
         }
-        try (FileOutputStream out = new FileOutputStream("result.txt")) {
-            out.write(stringBuilder.toString().getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return stringBuilder.toString();
     }
 }
