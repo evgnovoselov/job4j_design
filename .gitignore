@@ -24,6 +24,7 @@ hs_err_pid*
 
 # My rules =>
 target
+even.txt
 
 # IDEA
 .idea
