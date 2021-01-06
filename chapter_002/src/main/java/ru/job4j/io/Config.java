@@ -19,10 +19,30 @@ public class Config {
     }
 
     public void load() {
+        try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
+            values.putAll(read.lines()
+                    .filter(line -> !line.isBlank())
+                    .filter(line -> !line.contains("##"))
+                    .filter(line -> line.contains("="))
+                    .collect(
+                            HashMap::new,
+                            (map, line) -> {
+                                int div = line.indexOf("=");
+                                String key = line.substring(0, div).trim();
+                                String value = line.substring(div + 1).trim();
+                                if (!key.isBlank() && !value.isBlank()) {
+                                    map.put(key, value);
+                                }
+                            },
+                            HashMap::putAll
+                    ));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String value(String key) {
-        throw new UnsupportedOperationException("Don't impl this method yet!");
+        return values.get(key);
     }
 
     @Override
