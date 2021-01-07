@@ -22,7 +22,7 @@ public class Config {
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
             values.putAll(read.lines()
                     .filter(line -> !line.isBlank())
-                    .filter(line -> !line.contains("##"))
+                    .filter(line -> !line.trim().startsWith("#"))
                     .filter(line -> line.contains("="))
                     .collect(
                             HashMap::new,
