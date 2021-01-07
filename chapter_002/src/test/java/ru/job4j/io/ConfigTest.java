@@ -62,7 +62,7 @@ public class ConfigTest {
         config.load();
         assertThat(
                 config.value("two_space"),
-                is("value")
+                is("#value")
         );
     }
 
