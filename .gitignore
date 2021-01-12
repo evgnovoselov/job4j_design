@@ -29,4 +29,5 @@ hs_err_pid*
 # My rules =>
 target
 /files/404.txt
-/files/unavailable.csv
+/files/test/unavailable.csv
+!/files/test/*.log
