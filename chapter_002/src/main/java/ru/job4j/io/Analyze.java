@@ -29,7 +29,7 @@ public class Analyze {
                 if (unavailable) {
                     if (line.startsWith("200") || line.startsWith("300")) {
                         unavailable = false;
-                        out.write(time + System.lineSeparator());
+                        out.println(time);
                     }
                 }
             }
