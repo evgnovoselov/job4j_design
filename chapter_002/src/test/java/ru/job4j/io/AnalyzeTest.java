@@ -1,10 +1,10 @@
 package ru.job4j.io;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,16 +15,26 @@ import static org.hamcrest.Matchers.is;
  * Класс для проверки метода анализа лога доступности сервера.
  */
 public class AnalyzeTest {
-    private final String target = "../files/test/unavailable.csv";
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     /**
      * Метод проверяет отрезки недоступности сервера.
      */
     @Test
-    public void whenHaveDownTimeThenTime() {
+    public void whenHaveDownTimeThenTime() throws IOException {
+        File source = folder.newFile("server_down_time.log");
+        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(source)))) {
+            out.println("200 10:56:01");
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("200 10:59:01");
+            out.println("500 11:01:02");
+            out.println("200 11:02:02");
+        }
+        File target = folder.newFile("unavailable.csv");
         Analyze analyze = new Analyze();
-        String source = "../files/test/server_down_time.log";
-        analyze.unavailable(source, target);
+        analyze.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
         List<String> expected = null;
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             expected = in.lines().collect(Collectors.toList());
@@ -38,10 +48,18 @@ public class AnalyzeTest {
      * Метод проверяет лог, когда сервер перестал быть доступен совсем.
      */
     @Test
-    public void whenServerUpDownAndNotUpThenNotHaveUpTime() {
+    public void whenServerUpDownAndNotUpThenNotHaveUpTime() throws IOException {
+        File source = folder.newFile("server_up_down_and_not_up.log");
+        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(source)))) {
+            out.println("200 10:56:01");
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("500 11:01:02");
+            out.println("400 11:02:02");
+        }
+        File target = folder.newFile("unavailable.csv");
         Analyze analyze = new Analyze();
-        String source = "../files/test/server_up_down_and_not_up.log";
-        analyze.unavailable(source, target);
+        analyze.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
         List<String> expected = null;
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             expected = in.lines().collect(Collectors.toList());
@@ -55,10 +73,17 @@ public class AnalyzeTest {
      * Метод проверяет лог, когда сервер не был изначально доступен и до конца лога.
      */
     @Test
-    public void whenDownThenHaveDownTime() {
+    public void whenDownThenHaveDownTime() throws IOException {
+        File source = folder.newFile("server_down.log");
+        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(source)))) {
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("500 11:01:02");
+            out.println("400 11:02:02");
+        }
+        File target = folder.newFile("unavailable.csv");
         Analyze analyze = new Analyze();
-        String source = "../files/test/server_down.log";
-        analyze.unavailable(source, target);
+        analyze.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
         List<String> expected = null;
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             expected = in.lines().collect(Collectors.toList());
@@ -72,10 +97,17 @@ public class AnalyzeTest {
      * Метод проверяет лог, когда сервер был не доступен и заработал.
      */
     @Test
-    public void whenDownUpThenHaveTime() {
+    public void whenDownUpThenHaveTime() throws IOException {
+        File source = folder.newFile("server_down_up.log");
+        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(source)))) {
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("500 11:01:02");
+            out.println("300 11:02:02");
+        }
+        File target = folder.newFile("unavailable.csv");
         Analyze analyze = new Analyze();
-        String source = "../files/test/server_down_up.log";
-        analyze.unavailable(source, target);
+        analyze.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
         List<String> expected = null;
         try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             expected = in.lines().collect(Collectors.toList());
