@@ -11,8 +11,17 @@ import java.util.List;
  */
 public class Search {
     public static void main(String[] args) throws IOException {
-        Path start = Paths.get(".");
-        search(start, "js").forEach(System.out::println);
+        if (args.length < 2) {
+            throw new IllegalArgumentException("Root folder or search extension is null. Usage java -jar search.jar ROOT_FOLDER EXTENSION");
+        }
+        Path start = Paths.get(args[0]);
+        if (!Files.exists(start)) {
+            throw new IllegalArgumentException(String.format("Not exist %s", start.toAbsolutePath()));
+        }
+        if (!Files.isDirectory(start)) {
+            throw new IllegalArgumentException(String.format("Not directory %s", start.toAbsolutePath()));
+        }
+        search(start, args[1]).forEach(System.out::println);
     }
 
     /**
