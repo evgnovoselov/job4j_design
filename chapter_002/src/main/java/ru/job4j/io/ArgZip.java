@@ -1,5 +1,8 @@
 package ru.job4j.io;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -22,11 +25,17 @@ public class ArgZip {
         }
         String directory = directory();
         System.out.println("directory = " + directory);
+        Path dir = Paths.get(directory);
+        if (!Files.isDirectory(dir)) {
+            throw new IllegalArgumentException(String.format("Error! Not directory: %s", dir));
+        }
         String exclude = exclude();
-        System.out.println("exclude = " + exclude);
         String output = output();
-        System.out.println("output = " + output);
-        return false;
+        Path out = Paths.get(output);
+        if (!Files.isDirectory(out.getParent()) || !Files.isWritable(out.getParent())) {
+            throw new IllegalArgumentException(String.format("Error! Not directory: %s", out.getParent()));
+        }
+        return true;
     }
 
     public String directory() {
