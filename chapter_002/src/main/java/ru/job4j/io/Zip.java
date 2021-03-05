@@ -25,8 +25,11 @@ public class Zip {
     }
 
     public static void main(String[] args) {
-        if (!new ArgZip(args).valid()) {
+        ArgZip argZip = new ArgZip(args);
+        if (!argZip.valid()) {
             throw new IllegalArgumentException("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
         }
+        // TODO переписать на стрим апи с однократным вызовом packFiles
+        SearchFiles searchFiles = new SearchFiles(path -> !path.endsWith(argZip.exclude()));
     }
 }
