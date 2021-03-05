@@ -21,32 +21,30 @@ public class ArgZip {
             throw new IllegalArgumentException("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
         }
         String directory = directory();
+        System.out.println("directory = " + directory);
         String exclude = exclude();
+        System.out.println("exclude = " + exclude);
         String output = output();
+        System.out.println("output = " + output);
         return false;
     }
 
     public String directory() {
-        System.out.println(args[0]);
-        if (!"-d=".startsWith(args[0])) {
-            throw new IllegalArgumentException("Error program argument -d");
-        }
-        return null;
+        return getArgumentValue("-d", args[0]);
     }
 
     public String exclude() {
-        System.out.println(args[1]);
-        if (!"-e=".startsWith(args[1])) {
-            throw new IllegalArgumentException("Error program argument -e");
-        }
-        return null;
+        return getArgumentValue("-e", args[1]);
     }
 
     public String output() {
-        System.out.println(args[2]);
-        if (!"-o=".startsWith(args[2])) {
-            throw new IllegalArgumentException("Error program argument -o");
+        return getArgumentValue("-o", args[2]);
+    }
+
+    private static String getArgumentValue(String key, String argument) {
+        if (!argument.startsWith(String.format("%s=", key))) {
+            throw new IllegalArgumentException(String.format("Error program argument %s", key));
         }
-        return null;
+        return argument.substring(key.length() + 1);
     }
 }
