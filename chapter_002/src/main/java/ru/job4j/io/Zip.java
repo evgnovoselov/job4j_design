@@ -25,6 +25,8 @@ public class Zip {
     }
 
     public static void main(String[] args) {
-        new ArgZip(args).valid();
+        if (!new ArgZip(args).valid()) {
+            throw new IllegalArgumentException("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
+        }
     }
 }

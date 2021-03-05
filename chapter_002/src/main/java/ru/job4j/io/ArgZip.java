@@ -19,23 +19,27 @@ public class ArgZip {
     }
 
     public boolean valid() {
+        boolean result = true;
         System.out.println(List.of(args));
-        if (args.length < 3) {
-            throw new IllegalArgumentException("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
+        if (result && args.length < 3) {
+            System.out.println("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
+            result = false;
         }
         String directory = directory();
         System.out.println("directory = " + directory);
         Path dir = Paths.get(directory);
-        if (!Files.isDirectory(dir)) {
-            throw new IllegalArgumentException(String.format("Error! Not directory: %s", dir));
+        if (result && !Files.isDirectory(dir)) {
+            System.out.printf("Error! Not directory: %s%n", dir);
+            result = false;
         }
         String exclude = exclude();
         String output = output();
         Path out = Paths.get(output);
-        if (!Files.isDirectory(out.getParent()) || !Files.isWritable(out.getParent())) {
-            throw new IllegalArgumentException(String.format("Error! Not directory: %s", out.getParent()));
+        if (result && !Files.isDirectory(out.getParent()) || !Files.isWritable(out.getParent())) {
+            System.out.printf("Error! Not directory: %s%n", out.getParent());
+            result = false;
         }
-        return true;
+        return result;
     }
 
     public String directory() {
