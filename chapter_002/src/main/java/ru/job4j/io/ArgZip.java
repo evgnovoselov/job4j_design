@@ -43,21 +43,23 @@ public class ArgZip {
     }
 
     public String directory() {
-        return getArgumentValue("-d", args[0]);
+        return getArgumentValue("-d", args);
     }
 
     public String exclude() {
-        return getArgumentValue("-e", args[1]);
+        return getArgumentValue("-e", args);
     }
 
     public String output() {
-        return getArgumentValue("-o", args[2]);
+        return getArgumentValue("-o", args);
     }
 
-    private static String getArgumentValue(String key, String argument) {
+    private static String getArgumentValue(String key, String[] arguments) {
+        // TODO Переписать поиск значения аргумента из массива
         if (!argument.startsWith(String.format("%s=", key))) {
             throw new IllegalArgumentException(String.format("Error program argument %s", key));
         }
-        return argument.substring(key.length() + 1);
+        //return argument.substring(key.length() + 1);
+        return null;
     }
 }
