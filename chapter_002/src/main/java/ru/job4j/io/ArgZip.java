@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Класс для работы с входными аргументами.
@@ -21,21 +20,16 @@ public class ArgZip {
 
     public boolean valid() {
         boolean result = true;
-        System.out.println(List.of(args));
-        if (result && args.length < 3) {
+        if (args.length < 3) {
             System.out.println("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
             result = false;
         }
-        String directory = directory();
-        System.out.println("directory = " + directory);
-        Path dir = Paths.get(directory);
+        Path dir = Paths.get(directory());
         if (result && !Files.isDirectory(dir)) {
             System.out.printf("Error! Not directory: %s%n", dir);
             result = false;
         }
-        String exclude = exclude();
-        String output = output();
-        Path out = Paths.get(output);
+        Path out = Paths.get(output());
         if (result && !Files.isDirectory(out.getParent()) || !Files.isWritable(out.getParent())) {
             System.out.printf("Error! Not directory: %s%n", out.getParent());
             result = false;
