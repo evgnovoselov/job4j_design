@@ -30,7 +30,7 @@ public class ArgZip {
             result = false;
         }
         Path out = Paths.get(output());
-        if (result && !Files.isDirectory(out.getParent()) || !Files.isWritable(out.getParent())) {
+        if (result && !Files.isDirectory(out.getParent()) && !Files.isWritable(out.getParent())) {
             System.out.printf("Error! Not directory: %s%n", out.getParent());
             result = false;
         }
