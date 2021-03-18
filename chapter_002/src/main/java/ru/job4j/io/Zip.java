@@ -13,13 +13,19 @@ import java.util.zip.ZipOutputStream;
  * Класс архивации.
  */
 public class Zip {
-    public void packFiles(List<File> sources, File target) {
-        // TODO Поправить
+    /**
+     * Архивации директории.
+     *
+     * @param sources Файлы архивации.
+     * @param target  Конечный архив.
+     * @param argZip  Аргументы запуска.
+     */
+    public void packFiles(List<File> sources, File target, ArgZip argZip) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
             for (File source : sources) {
-                zip.putNextEntry(new ZipEntry(source.getPath()));
-                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
-                    zip.write(out.readAllBytes());
+                zip.putNextEntry(new ZipEntry(Paths.get(argZip.directory()).relativize(source.toPath()).toString()));
+                try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(source))) {
+                    zip.write(in.readAllBytes());
                 }
                 zip.closeEntry();
             }
@@ -28,6 +34,12 @@ public class Zip {
         }
     }
 
+    /**
+     * Архивация файла.
+     *
+     * @param source Файл для архивации.
+     * @param target Архив файла.
+     */
     public void packSingleFile(File source, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
             zip.putNextEntry(new ZipEntry(source.getName()));
@@ -39,16 +51,21 @@ public class Zip {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         ArgZip argZip = new ArgZip(args);
         if (!argZip.valid()) {
             throw new IllegalArgumentException("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
         }
         SearchFiles searchFiles = new SearchFiles(path -> !path.toFile().getName().endsWith(argZip.exclude()));
-        Files.walkFileTree(Paths.get(argZip.directory()), searchFiles);
-        new Zip().packFiles(
-                searchFiles.getPaths().stream().map(Path::toFile).collect(Collectors.toList()),
-                new File(argZip.output())
-        );
+        try {
+            Files.walkFileTree(Paths.get(argZip.directory()), searchFiles);
+            new Zip().packFiles(
+                    searchFiles.getPaths().stream().map(Path::toFile).collect(Collectors.toList()),
+                    new File(argZip.output()),
+                    argZip
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
