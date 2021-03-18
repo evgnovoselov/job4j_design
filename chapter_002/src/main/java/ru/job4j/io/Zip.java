@@ -14,7 +14,17 @@ import java.util.zip.ZipOutputStream;
  */
 public class Zip {
     public void packFiles(List<File> sources, File target) {
-
+        // TODO Поправить
+        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
+            for (File source : sources) {
+                zip.putNextEntry(new ZipEntry(source.getPath()));
+                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
+                    zip.write(out.readAllBytes());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void packSingleFile(File source, File target) {
