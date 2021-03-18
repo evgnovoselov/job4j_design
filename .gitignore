@@ -31,3 +31,4 @@ target
 /files/404.txt
 /files/test/unavailable.csv
 !/files/test/*.log
+/files/ignore/

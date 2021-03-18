@@ -3,6 +3,7 @@ package ru.job4j.io;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,11 +56,10 @@ public class ArgZip {
     }
 
     private static String getArgumentValue(String key, String[] arguments) {
-        // TODO Переписать поиск значения аргумента из массива
-        if (!argument.startsWith(String.format("%s=", key))) {
-            throw new IllegalArgumentException(String.format("Error program argument %s", key));
-        }
-        //return argument.substring(key.length() + 1);
-        return null;
+        String argument = Arrays.stream(arguments)
+                .filter(s -> s.startsWith(String.format("%s=", key)))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Error program argument %s", key)));
+        return argument.substring(key.length() + 1);
     }
 }
