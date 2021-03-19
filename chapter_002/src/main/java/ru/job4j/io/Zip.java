@@ -51,21 +51,32 @@ public class Zip {
         }
     }
 
+    /**
+     * Метод поиска файлов с фильтром расширений.
+     *
+     * @param directory Директория поиска.
+     * @param exclude   Исключение файлов по расширению
+     * @return Список файлов.
+     */
+    private static List<File> search(String directory, String exclude) {
+        SearchFiles searchFiles = new SearchFiles(path -> !path.toFile().getName().endsWith(exclude));
+        try {
+            Files.walkFileTree(Paths.get(directory), searchFiles);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return searchFiles.getPaths().stream().map(Path::toFile).collect(Collectors.toList());
+    }
+
     public static void main(String[] args) {
         ArgZip argZip = new ArgZip(args);
         if (!argZip.valid()) {
             throw new IllegalArgumentException("Usage java -jar zip.jar -d=DIRECTORY -e=EXCLUDE_EXT -o=OUTPUT_ZIP_FILE");
         }
-        SearchFiles searchFiles = new SearchFiles(path -> !path.toFile().getName().endsWith(argZip.exclude()));
-        try {
-            Files.walkFileTree(Paths.get(argZip.directory()), searchFiles);
-            new Zip().packFiles(
-                    searchFiles.getPaths().stream().map(Path::toFile).collect(Collectors.toList()),
-                    new File(argZip.output()),
-                    argZip
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Zip().packFiles(
+                search(argZip.directory(), argZip.exclude()),
+                new File(argZip.output()),
+                argZip
+        );
     }
 }
