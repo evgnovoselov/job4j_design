@@ -6,6 +6,9 @@ package ru.job4j.io;
 public class ConsoleChat {
     private final String path;
     private final String botAnswers;
+    private static final String OUT = "закончить";
+    private static final String STOP = "стоп";
+    private static final String CONTINUE = "продолжить";
 
     /**
      * Конструктор консольного чата с ботом.
