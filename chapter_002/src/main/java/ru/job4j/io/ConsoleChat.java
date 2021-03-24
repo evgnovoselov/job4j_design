@@ -25,10 +25,14 @@ public class ConsoleChat {
      * Метод запуска консольного бота.
      */
     private void run() {
+
     }
 
     public static void main(String[] args) {
-        ConsoleChat cc = new ConsoleChat("", "");
+        ConsoleChat cc = new ConsoleChat(
+                "./files/ignore/consoleChatLog.txt",
+                "./files/ignore/botAnswers.txt"
+        );
         cc.run();
     }
 }
