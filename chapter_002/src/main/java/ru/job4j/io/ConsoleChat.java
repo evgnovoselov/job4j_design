@@ -69,15 +69,13 @@ public class ConsoleChat {
      * @return Ответ бота.
      */
     private String getBotAnswer() {
-        String answer = "";
-        List<String> answers;
+        List<String> answers = List.of();
         try {
             answers = Files.readAllLines(Paths.get(botAnswers));
-            answer = answers.stream().skip((new Random()).nextInt(answers.size())).findAny().orElse("");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return answer;
+        return answers.get((new Random()).nextInt(answers.size()));
     }
 
     public static void main(String[] args) {
