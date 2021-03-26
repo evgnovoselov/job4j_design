@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -36,46 +37,61 @@ public class ConsoleChat {
      * Метод запуска консольного бота.
      */
     private void run() {
-        String word = "";
+        String word;
         Set<String> statuses = Set.of(CONTINUE, STOP, OUT);
         String status = CONTINUE;
         System.out.println("ConsoleChat");
-        try (
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), Charset.forName("WINDOWS-1251"))
-        ) {
+        List<String> answers = getBotAnswers();
+        List<String> chatLog = new ArrayList<>();
+        Random random = new Random();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             do {
                 word = reader.readLine();
-                writer.write(word);
-                writer.newLine();
+                chatLog.add(word);
                 if (statuses.contains(word)) {
                     status = word;
                 }
                 if (status.equals(CONTINUE)) {
-                    String answer = getBotAnswer();
+                    String answer = answers.get(random.nextInt(answers.size()));
                     System.out.println(answer);
-                    writer.write(answer);
-                    writer.newLine();
+                    chatLog.add(answer);
                 }
             } while (!status.equals(OUT));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        writeChatLog(chatLog);
     }
 
     /**
-     * Метод возвращает ответ бота из заданного набора фраз.
+     * Метод возвращает список ответов бота из заданного набора фраз.
      *
-     * @return Ответ бота.
+     * @return Список ответов бота.
      */
-    private String getBotAnswer() {
-        List<String> answers = List.of();
+    private List<String> getBotAnswers() {
+        List<String> answers = List.of("");
         try {
             answers = Files.readAllLines(Paths.get(botAnswers));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return answers.get((new Random()).nextInt(answers.size()));
+        return !answers.isEmpty() ? answers : List.of("");
+    }
+
+    /**
+     * Сохраняем историю чата в файл.
+     *
+     * @param chatLog Список сообщений чата.
+     */
+    private void writeChatLog(List<String> chatLog) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), Charset.forName("WINDOWS-1251"))) {
+            for (String line : chatLog) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
