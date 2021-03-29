@@ -38,8 +38,7 @@ public class ConsoleChat {
      */
     private void run() {
         String word;
-        Set<String> statuses = Set.of(CONTINUE, STOP, OUT);
-        String status = CONTINUE;
+        boolean isActive = true;
         System.out.println("ConsoleChat");
         List<String> answers = getBotAnswers();
         List<String> chatLog = new ArrayList<>();
@@ -48,15 +47,18 @@ public class ConsoleChat {
             do {
                 word = reader.readLine();
                 chatLog.add(word);
-                if (statuses.contains(word)) {
-                    status = word;
+                if (isActive && (word.equals(STOP) || word.equals(OUT))) {
+                    isActive = false;
                 }
-                if (status.equals(CONTINUE)) {
+                if (!isActive && word.equals(CONTINUE)) {
+                    isActive = true;
+                }
+                if (isActive) {
                     String answer = answers.get(random.nextInt(answers.size()));
                     System.out.println(answer);
                     chatLog.add(answer);
                 }
-            } while (!status.equals(OUT));
+            } while (!word.equals(OUT));
         } catch (IOException e) {
             e.printStackTrace();
         }
