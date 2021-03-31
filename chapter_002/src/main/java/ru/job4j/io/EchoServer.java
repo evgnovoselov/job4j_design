@@ -22,13 +22,14 @@ public class EchoServer {
                 ) {
                     String str = in.readLine();
                     while (!str.isEmpty()) {
-                        if (str.startsWith("GET") && str.contains("msg=Bye")) {
+                        if (str.startsWith("GET") && str.contains("msg=Exit")) {
                             isActive = false;
                         }
                         System.out.println(str);
                         str = in.readLine();
                     }
-                    out.write("HTTP/1.1 200 OK \r\n".getBytes());
+                    out.write("HTTP/1.1 200 OK \r\n\r\n".getBytes());
+                    out.write("Hello, my dear!".getBytes());
                 }
             }
         }
