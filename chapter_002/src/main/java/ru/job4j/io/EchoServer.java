@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Сервер ожидающий клиента.
+ * Сервер эхо.
  */
 public class EchoServer {
     public static void main(String[] args) throws IOException {
@@ -20,15 +20,24 @@ public class EchoServer {
                         OutputStream out = socket.getOutputStream();
                         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
                 ) {
+                    String answer = "";
                     String str = in.readLine();
-                    while (!str.isEmpty()) {
-                        if (str.startsWith("GET") && str.contains("msg=Bye")) {
-                            isActive = false;
+                    while (str != null && !str.isEmpty()) {
+                        if (str.startsWith("GET")) {
+                            answer = str.substring(str.indexOf("msg=") + 4, str.indexOf(" HTTP"));
+                            if (answer.equals("Exit")) {
+                                isActive = false;
+                            }
                         }
                         System.out.println(str);
                         str = in.readLine();
                     }
-                    out.write("HTTP/1.1 200 OK \r\n".getBytes());
+                    out.write("HTTP/1.1 200 OK \r\n\r\n".getBytes());
+                    if (isActive) {
+                        out.write(answer.getBytes());
+                    } else {
+                        out.write("Goodbye".getBytes());
+                    }
                 }
             }
         }
