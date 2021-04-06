@@ -1,5 +1,8 @@
 package ru.job4j.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +14,9 @@ import java.net.Socket;
  * Сервер эхо.
  */
 public class EchoServer {
-    public static void main(String[] args) throws IOException {
+    private static final Logger LOG = LoggerFactory.getLogger(EchoServer.class.getName());
+
+    public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9000)) {
             boolean isActive = true;
             while (isActive && !server.isClosed()) {
@@ -38,8 +43,12 @@ public class EchoServer {
                     } else {
                         out.write("Goodbye".getBytes());
                     }
+                } catch (IOException e) {
+                    LOG.error("Ошибка в обработке соединения", e);
                 }
             }
+        } catch (IOException e) {
+            LOG.error("Ошибка при создании соединения", e);
         }
     }
 }
