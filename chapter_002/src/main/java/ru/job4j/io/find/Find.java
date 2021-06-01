@@ -9,4 +9,9 @@ package ru.job4j.io.find;
  * -o - результат записать в файл.
  */
 public class Find {
+    public static void main(String[] args) {
+        if (args.length < 4) {
+            throw new IllegalArgumentException("Error argument count.");
+        }
+    }
 }
