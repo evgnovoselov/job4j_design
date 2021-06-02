@@ -13,5 +13,6 @@ public class Find {
         if (args.length < 4) {
             throw new IllegalArgumentException("Error argument count.");
         }
+        Arguments arguments = new Arguments(args);
     }
 }
