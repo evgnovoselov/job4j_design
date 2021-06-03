@@ -23,7 +23,7 @@ public class Find {
             throw new IllegalArgumentException(String.format("Error! Not directory: %s", arguments.directory()));
         }
         if (!types.contains(arguments.type())) {
-            throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need: %s", arguments.type(), types));
+            throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", arguments.type(), types));
         }
     }
 }
