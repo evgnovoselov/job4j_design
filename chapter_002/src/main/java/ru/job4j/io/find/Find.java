@@ -1,8 +1,10 @@
 package ru.job4j.io.find;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Класс ищет файл в заданном каталоге и подкаталогах.
@@ -25,5 +27,12 @@ public class Find {
         if (!types.contains(arguments.type())) {
             throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", arguments.type(), types));
         }
+        Visitor visitor = new Visitor(path -> path.toString().endsWith(".txt"));
+        try {
+            Files.walkFileTree(Path.of(arguments.directory()), visitor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(visitor.getPaths());
     }
 }

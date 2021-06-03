@@ -27,4 +27,8 @@ public class Visitor extends SimpleFileVisitor<Path> {
         }
         return FileVisitResult.CONTINUE;
     }
+
+    public List<Path> getPaths() {
+        return paths;
+    }
 }
