@@ -18,7 +18,7 @@ public class Find {
     public static void main(String[] args) {
         Set<String> types = Set.of("mask", "name", "regex");
         if (args.length < 4) {
-            throw new IllegalArgumentException("Error argument count.");
+            throw new IllegalArgumentException("Error argument count. Need to set: -d=<directory search> -n=<file name or mask or regex> -t=<type: mask, name, regex> -o=<output file>");
         }
         Arguments arguments = new Arguments(args);
         if (!Files.isDirectory(Path.of(arguments.directory()))) {
