@@ -34,7 +34,14 @@ public class Find {
             visitor = new Visitor(path -> path.getFileName().toString().matches(arguments.name()));
         } else {
             // TODO mask
-            visitor = new Visitor(path -> path.getFileName().toString().endsWith(".txt"));
+//            visitor = new Visitor(path -> path.getFileName().toString().endsWith(".txt"));
+            visitor = new Visitor(path -> {
+                boolean result = false;
+                if (arguments.name().equals("*")) {
+                    result = true;
+                }
+                return result;
+            });
         }
         try {
             Files.walkFileTree(Path.of(arguments.directory()), visitor);

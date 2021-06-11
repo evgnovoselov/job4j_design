@@ -12,8 +12,8 @@ import java.util.function.Predicate;
  * Класс просматривает папки и подпапки в поисках файла по предикату.
  */
 public class Visitor extends SimpleFileVisitor<Path> {
-    private Predicate<Path> predicate;
-    private List<Path> paths = new ArrayList<>();
+    private final Predicate<Path> predicate;
+    private final List<Path> paths = new ArrayList<>();
 
     public Visitor(Predicate<Path> predicate) {
         this.predicate = predicate;
