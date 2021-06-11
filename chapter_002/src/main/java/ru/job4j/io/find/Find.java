@@ -27,7 +27,7 @@ public class Find {
         if (!types.contains(arguments.type())) {
             throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", arguments.type(), types));
         }
-        Visitor visitor = new Visitor(path -> path.toString().endsWith(".txt"));
+        Visitor visitor = new Visitor(path -> path.getFileName().toString().endsWith(".txt"));
         try {
             Files.walkFileTree(Path.of(arguments.directory()), visitor);
         } catch (IOException e) {
