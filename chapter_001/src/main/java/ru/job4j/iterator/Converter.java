@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * TODO add comments
+ * Конвертер.
  *
  * @author Evgeny Novoselov
  */
