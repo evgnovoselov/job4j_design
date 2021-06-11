@@ -27,7 +27,15 @@ public class Find {
         if (!types.contains(arguments.type())) {
             throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", arguments.type(), types));
         }
-        Visitor visitor = new Visitor(path -> path.getFileName().toString().endsWith(".txt"));
+        Visitor visitor;
+        if (arguments.type().equals("name")) {
+            visitor = new Visitor(path -> path.getFileName().toString().equals(arguments.name()));
+        } else if (arguments.type().equals("regex")) {
+            visitor = new Visitor(path -> path.getFileName().toString().matches(arguments.name()));
+        } else {
+            // TODO mask
+            visitor = new Visitor(path -> path.getFileName().toString().endsWith(".txt"));
+        }
         try {
             Files.walkFileTree(Path.of(arguments.directory()), visitor);
         } catch (IOException e) {
