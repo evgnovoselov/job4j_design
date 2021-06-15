@@ -1,6 +1,9 @@
 package ru.job4j.io.find;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Класс для работы с аргументами запуска программы.
@@ -35,5 +38,22 @@ public class Arguments {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Error program argument %s", key)));
         return argument.substring(key.length() + 1);
+    }
+
+    /**
+     * Проверка параметров запуска.
+     *
+     * @param types Поддерживаемые типы имени файла.
+     */
+    public void validate(Set<String> types) {
+        if (args.length < 4) {
+            throw new IllegalArgumentException("Error argument count. Need to set: -d=<directory search> -n=<file name or mask or regex> -t=<type: mask, name, regex> -o=<output file>");
+        }
+        if (!Files.isDirectory(Path.of(directory()))) {
+            throw new IllegalArgumentException(String.format("Error! Not directory: %s", directory()));
+        }
+        if (!types.contains(type())) {
+            throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", type(), types));
+        }
     }
 }
