@@ -55,5 +55,8 @@ public class Arguments {
         if (!types.contains(type())) {
             throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", type(), types));
         }
+        if (!Files.isWritable(Path.of(output()))) {
+            throw new IllegalArgumentException(String.format("Error! Not writable in %s", output()));
+        }
     }
 }
