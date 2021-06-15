@@ -16,18 +16,38 @@ public class Arguments {
         this.args = args;
     }
 
+    /**
+     * Возвращаем директорию из аргумента запуска -d.
+     *
+     * @return Директория.
+     */
     public String directory() {
         return getArgumentValue("-d", args);
     }
 
+    /**
+     * Возвращаем аргумент имени для поиска -n.
+     *
+     * @return Имя.
+     */
     public String name() {
         return getArgumentValue("-n", args);
     }
 
+    /**
+     * Возвращаем тип имения для поиска -t.
+     *
+     * @return Тип имени поиска.
+     */
     public String type() {
         return getArgumentValue("-t", args);
     }
 
+    /**
+     * Возвращаем значение аргумента файла вывода результата -o.
+     *
+     * @return Путь записи результата в файл.
+     */
     public String output() {
         return getArgumentValue("-o", args);
     }

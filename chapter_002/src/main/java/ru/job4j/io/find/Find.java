@@ -24,6 +24,14 @@ public class Find {
         write(arguments.output(), search(arguments.directory(), arguments.type(), arguments.name()));
     }
 
+    /**
+     * Класс выполняет поиск файлов по директории и поддиректории.
+     *
+     * @param directory Директория.
+     * @param type      Тип записи имени файла.
+     * @param name      Имя файла.
+     * @return Список путей к файлам.
+     */
     public static List<Path> search(String directory, String type, String name) {
         Visitor visitor = new Visitor(path -> false);
         if (type.equals("name")) {
@@ -43,6 +51,12 @@ public class Find {
         return visitor.getPaths();
     }
 
+    /**
+     * Записываем пути к файлам в файл.
+     *
+     * @param output Путь к файлу для записи.
+     * @param paths  Пути к файлам.
+     */
     public static void write(String output, List<Path> paths) {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(output))) {
             for (Path file : paths) {
@@ -54,6 +68,12 @@ public class Find {
         }
     }
 
+    /**
+     * Метод переводит маску в регулярное вырожение.
+     *
+     * @param text Текст для перевода.
+     * @return Регулярное выражение.
+     */
     private static String maskToRegex(String text) {
         StringBuilder reg = new StringBuilder();
         for (byte b : text.getBytes(StandardCharsets.UTF_8)) {
