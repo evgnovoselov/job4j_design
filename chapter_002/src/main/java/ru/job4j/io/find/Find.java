@@ -1,5 +1,6 @@
 package ru.job4j.io.find;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,12 +28,14 @@ public class Find {
         if (!types.contains(arguments.type())) {
             throw new IllegalArgumentException(String.format("Error! Not valid type argument: %s, need one of these: %s", arguments.type(), types));
         }
-        Visitor visitor;
+        Visitor visitor = new Visitor(path -> false);
         if (arguments.type().equals("name")) {
             visitor = new Visitor(path -> path.getFileName().toString().equals(arguments.name()));
-        } else if (arguments.type().equals("regex")) {
+        }
+        if (arguments.type().equals("regex")) {
             visitor = new Visitor(path -> path.getFileName().toString().matches(arguments.name()));
-        } else {
+        }
+        if (arguments.type().equals("mask")) {
             StringBuilder reg = new StringBuilder();
             for (byte b : arguments.name().getBytes(StandardCharsets.UTF_8)) {
                 char ch = (char) b;
@@ -50,7 +53,6 @@ public class Find {
                 }
                 reg.append(ch);
             }
-            System.out.println(reg);
             visitor = new Visitor(path -> path.getFileName().toString().matches(reg.toString()));
         }
         try {
@@ -58,7 +60,13 @@ public class Find {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(visitor.getPaths());
-        visitor.getPaths().forEach(System.out::println);
+        try (BufferedWriter writer = Files.newBufferedWriter(Path.of(arguments.output()))) {
+            for (Path file : visitor.getPaths()) {
+                writer.write(file.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
