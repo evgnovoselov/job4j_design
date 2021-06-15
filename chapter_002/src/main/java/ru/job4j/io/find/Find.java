@@ -1,10 +1,10 @@
 package ru.job4j.io.find;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Класс ищет файл в заданном каталоге и подкаталогах.
@@ -33,15 +33,25 @@ public class Find {
         } else if (arguments.type().equals("regex")) {
             visitor = new Visitor(path -> path.getFileName().toString().matches(arguments.name()));
         } else {
-            // TODO mask
-//            visitor = new Visitor(path -> path.getFileName().toString().endsWith(".txt"));
-            visitor = new Visitor(path -> {
-                boolean result = false;
-                if (arguments.name().equals("*")) {
-                    result = true;
+            StringBuilder reg = new StringBuilder();
+            for (byte b : arguments.name().getBytes(StandardCharsets.UTF_8)) {
+                char ch = (char) b;
+                if (ch == '*') {
+                    reg.append(".*");
+                    continue;
                 }
-                return result;
-            });
+                if (ch == '.') {
+                    reg.append("\\.");
+                    continue;
+                }
+                if (ch == '?') {
+                    reg.append(".");
+                    continue;
+                }
+                reg.append(ch);
+            }
+            System.out.println(reg);
+            visitor = new Visitor(path -> path.getFileName().toString().matches(reg.toString()));
         }
         try {
             Files.walkFileTree(Path.of(arguments.directory()), visitor);
@@ -49,5 +59,6 @@ public class Find {
             e.printStackTrace();
         }
         System.out.println(visitor.getPaths());
+        visitor.getPaths().forEach(System.out::println);
     }
 }
