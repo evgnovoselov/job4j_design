@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Класс ищет файл в заданном каталоге и подкаталогах.
@@ -38,10 +39,12 @@ public class Find {
             visitor = new Visitor(path -> path.getFileName().toString().equals(name));
         }
         if (type.equals("regex")) {
-            visitor = new Visitor(path -> path.getFileName().toString().matches(name));
+            Pattern pattern = Pattern.compile(name);
+            visitor = new Visitor(path -> pattern.matcher(path.getFileName().toString()).matches());
         }
         if (type.equals("mask")) {
-            visitor = new Visitor(path -> path.getFileName().toString().matches(maskToRegex(name)));
+            Pattern pattern = Pattern.compile(maskToRegex(name));
+            visitor = new Visitor(path -> pattern.matcher(path.getFileName().toString()).matches());
         }
         try {
             Files.walkFileTree(Path.of(directory), visitor);
