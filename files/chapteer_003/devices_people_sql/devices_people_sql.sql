@@ -51,7 +51,11 @@ select avg(price) from devices;
 -- (1 строка)
 
 -- 4. Используя группировку вывести для каждого человека среднюю цену его устройств.
-select p.name, avg(d.price) from devices_people as dp join people as p on dp.people_id = p.id join devices as d on dp.device_id = d.id group by p.name;
+select p.name, avg(d.price)
+from devices_people as dp
+join people as p on dp.people_id = p.id
+join devices as d on dp.device_id = d.id
+group by p.name;
 --    name   |   avg    
 -- ----------+----------
 --  Настя    |  5000.05
@@ -60,7 +64,12 @@ select p.name, avg(d.price) from devices_people as dp join people as p on dp.peo
 -- (3 строки)
 
 -- 5. Дополнить запрос п.4. условием, что средняя стоимость устройств должна быть больше 5000.
-select p.name, avg(d.price) from devices_people as dp join people as p on dp.people_id = p.id join devices as d on dp.device_id = d.id group by p.name having avg(d.price) > 5000;
+select p.name, avg(d.price)
+from devices_people as dp
+join people as p on dp.people_id = p.id
+join devices as d on dp.device_id = d.id
+group by p.name
+having avg(d.price) > 5000;
 --  name  |   avg   
 -- -------+---------
 --  Настя | 5000.05
