@@ -1,6 +1,11 @@
 package ru.job4j.jdbc;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.StringJoiner;
 
@@ -11,13 +16,18 @@ public class TableEditor implements AutoCloseable {
     private Connection connection;
     private Properties properties;
 
-    public TableEditor(Properties properties) {
+    public TableEditor(Properties properties) throws SQLException, ClassNotFoundException {
         this.properties = properties;
         initConnection();
     }
 
-    private void initConnection() {
+    private void initConnection() throws SQLException, ClassNotFoundException {
         connection = null;
+        Class.forName("org.postgresql.Driver");
+        String url = properties.getProperty("datasource.url");
+        String login = properties.getProperty("datasource.username");
+        String password = properties.getProperty("datasource.password");
+        connection = DriverManager.getConnection(url, login, password);
     }
 
     /**
@@ -26,6 +36,11 @@ public class TableEditor implements AutoCloseable {
      * @param tableName Имя таблицы.
      */
     public void createTable(String tableName) {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(String.format("create table if not exists %s();", tableName));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -65,6 +80,10 @@ public class TableEditor implements AutoCloseable {
     public void renameColumn(String tableName, String columnName, String newColumnName) {
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     /**
      * Вывод схемы таблицы.
      *
@@ -96,6 +115,23 @@ public class TableEditor implements AutoCloseable {
     public void close() throws Exception {
         if (connection != null) {
             connection.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        Properties properties = new Properties();
+        ClassLoader classLoader = ConnectionDemo.class.getClassLoader();
+        try (InputStream in = classLoader.getResourceAsStream("app.properties")) {
+            properties.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String tableName = "try_table";
+        try (TableEditor tableEditor = new TableEditor(properties)) {
+            tableEditor.createTable(tableName);
+            System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
