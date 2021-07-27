@@ -22,12 +22,19 @@ public class TableEditor implements AutoCloseable {
     }
 
     private void initConnection() throws SQLException, ClassNotFoundException {
-        connection = null;
         Class.forName("org.postgresql.Driver");
         String url = properties.getProperty("datasource.url");
         String login = properties.getProperty("datasource.username");
         String password = properties.getProperty("datasource.password");
         connection = DriverManager.getConnection(url, login, password);
+    }
+
+    private void executeSql(String sql) {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -36,11 +43,7 @@ public class TableEditor implements AutoCloseable {
      * @param tableName Имя таблицы.
      */
     public void createTable(String tableName) {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(String.format("create table if not exists %s();", tableName));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executeSql(String.format("create table if not exists %s();", tableName));
     }
 
     /**
@@ -49,6 +52,7 @@ public class TableEditor implements AutoCloseable {
      * @param tableName Имя таблицы.
      */
     public void dropTable(String tableName) {
+        executeSql(String.format("drop table if exists %s;", tableName));
     }
 
     /**
@@ -59,6 +63,7 @@ public class TableEditor implements AutoCloseable {
      * @param type       Тип столбца.
      */
     public void addColumn(String tableName, String columnName, String type) {
+        executeSql(String.format("alter table if exists %s add %s %s;", tableName, columnName, type));
     }
 
     /**
@@ -68,6 +73,7 @@ public class TableEditor implements AutoCloseable {
      * @param columnName Имя столбца.
      */
     public void dropColumn(String tableName, String columnName) {
+        executeSql(String.format("alter table if exists %s drop %s;", tableName, columnName));
     }
 
     /**
@@ -78,6 +84,7 @@ public class TableEditor implements AutoCloseable {
      * @param newColumnName Новое имя столбца.
      */
     public void renameColumn(String tableName, String columnName, String newColumnName) {
+        executeSql(String.format("alter table if exists %s rename %s to %s;", tableName, columnName, newColumnName));
     }
 
     public Connection getConnection() {
@@ -127,9 +134,23 @@ public class TableEditor implements AutoCloseable {
             e.printStackTrace();
         }
         String tableName = "try_table";
+        String[] column = new String[]{"id", "serial primary key"};
+        String[] column1 = new String[]{"name", "varchar(255)"};
+        String newNameColumn = "last_name";
         try (TableEditor tableEditor = new TableEditor(properties)) {
             tableEditor.createTable(tableName);
             System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+            tableEditor.addColumn(tableName, column[0], column[1]);
+            System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+            tableEditor.addColumn(tableName, column1[0], column1[1]);
+            System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+            tableEditor.dropColumn(tableName, column[0]);
+            System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+            tableEditor.renameColumn(tableName, column1[0], newNameColumn);
+            System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+            tableEditor.dropColumn(tableName, newNameColumn);
+            System.out.println(getTableScheme(tableEditor.getConnection(), tableName));
+            tableEditor.dropTable(tableName);
         } catch (Exception e) {
             e.printStackTrace();
         }
