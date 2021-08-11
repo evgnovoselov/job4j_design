@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -36,6 +33,7 @@ public class ImportDB {
                 cfg.getProperty("jdbc.username"),
                 cfg.getProperty("jdbc.password")
         )) {
+            createTable(cnt);
             for (User user : users) {
                 try (PreparedStatement ps =
                              cnt.prepareStatement("insert into users (name, email) values (?, ?)")) {
@@ -44,6 +42,18 @@ public class ImportDB {
                     ps.execute();
                 }
             }
+        }
+    }
+
+    private void createTable(Connection cnt) throws SQLException {
+        try (Statement st = cnt.createStatement()) {
+            st.execute(String.format(
+                    "create table if not exists %s (%s, %s, %s);",
+                    "users",
+                    "id serial primary key",
+                    "name varchar(255)",
+                    "email varchar(255)"
+            ));
         }
     }
 
