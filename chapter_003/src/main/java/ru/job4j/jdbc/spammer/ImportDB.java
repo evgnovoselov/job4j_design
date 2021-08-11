@@ -5,9 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class ImportDB {
     private Properties cfg;
@@ -19,9 +19,12 @@ public class ImportDB {
     }
 
     public List<User> load() throws IOException {
-        List<User> users = new ArrayList<>();
+        List<User> users;
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
-            // TODO add read;
+            users = rd.lines().map(s -> {
+                String[] split = s.split(";");
+                return new User(split[0], split[1]);
+            }).collect(Collectors.toList());
         }
         return users;
     }
