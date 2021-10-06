@@ -29,8 +29,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
         return age == user.age && Objects.equals(name, user.name);
     }
@@ -42,13 +46,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                '}';
+        return String.format("User{name='%s', age='%s'}", name, age);
     }
 
     public static void main(String[] args) {
-        
     }
 }
