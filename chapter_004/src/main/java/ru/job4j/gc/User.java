@@ -70,7 +70,7 @@ public class User {
                 Примитивы char: 2 byte * 6 == 12 byte
                 Выравнивание для кратности 16: 0 byte
                 Итого: 32 byte
-            }
+            }: 32 byte
         }: 36 byte + 32 byte = 68 byte
         Поле int: 4 byte
         Выравнивание для кратности 16: 8 byte
@@ -88,14 +88,33 @@ public class User {
                 Примитивы char: 2 byte * 5 == 10 byte
                 Выравнивание для кратности 16: 2 byte
                 Итого: 32 byte
-            }
+            }: 32 byte
         }: 36 byte + 32 byte = 68 byte
         Поле int: 4 byte
         Выравнивание для кратности 16: 8 byte
         Итого: 96 byte
          */
         User user1 = new User("Julia", 30);
+
+        /*
+        Ниже экземпляр класса User занимает памяти:
+        Заголовок: 16 byte
+        Поле String {
+            Поля String без new char[] расчитал в объявлении класса: 36 byte
+            Поле new char[9] {
+                Заголовок: 16 byte + 4 byte на длину массива == 20 byte
+                Примитивы char: 2 byte * 9 == 18 byte
+                Выравнивание для кратности 16: 10 byte
+                Итого: 48 byte
+            }: 48 byte
+        }: 36 byte + 48 byte = 84 byte
+        Поле int: 4 byte
+        Выравнивание для кратности 16: 8 byte
+        Итого: 112 byte
+         */
+        User user2 = new User("Alexander", 30);
         System.out.println(user);
         System.out.println(user1);
+        System.out.println(user2);
     }
 }
