@@ -59,6 +59,11 @@ public class User {
         return String.format("User{name='%s', age='%s'}", name, age);
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.printf("Removed %s%n", this);
+    }
+
     public static void main(String[] args) {
         /*
         Ниже экземпляр класса User занимает памяти:
