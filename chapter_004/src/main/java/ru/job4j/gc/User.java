@@ -118,6 +118,10 @@ public class User {
         Итого: 112 byte
          */
         User user2 = new User("Alexander", 30);
+        /*
+        Так же ссылки на объекты занимают 8 byte (32bit = 4 byte, 64bit = 8 byte)
+        У нас их 3, следоветельно будут занимать: 8 byte * 3 = 24 byte
+         */
         System.out.println(user);
         System.out.println(user1);
         System.out.println(user2);
