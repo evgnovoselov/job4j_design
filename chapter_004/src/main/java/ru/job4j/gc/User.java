@@ -125,5 +125,8 @@ public class User {
         System.out.println(user);
         System.out.println(user1);
         System.out.println(user2);
+        for (int i = 0; i < 2_000; i++) {
+            new User("User" + i, i);
+        }
     }
 }
