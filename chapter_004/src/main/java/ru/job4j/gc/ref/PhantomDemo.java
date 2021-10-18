@@ -46,12 +46,13 @@ public class PhantomDemo {
         }
 
         public void utilizeResource() {
-            for (ListIterator<MyPhantom> i = phantoms.listIterator(); i.hasNext(); ) {
-                MyPhantom current = i.next();
+            ListIterator<MyPhantom> iterator = phantoms.listIterator();
+            while (iterator.hasNext()) {
+                MyPhantom current = iterator.next();
                 if (current != null && current.enqueue()) {
                     System.out.println("Utilized " + current.get());
                     current.clear();
-                    i.remove();
+                    iterator.remove();
                 }
             }
         }
