@@ -1,7 +1,7 @@
 package ru.job4j.cache;
 
 /**
- * TODO Добавить комментарий.
+ * Класс демонстрирующий работу кеша.
  */
 public class Emulator {
     public static void main(String[] args) {
