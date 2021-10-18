@@ -58,12 +58,10 @@ public class WeakDemo {
         Object strong = someData.get(0).get();
         if (strong != null) {
             System.out.println("safe method, strong != null");
-            // do something
         } else {
             System.out.println("safe method, strong == null");
-            // do something
         }
-        // work with strong
+        Object object = strong;
     }
 
     /**
