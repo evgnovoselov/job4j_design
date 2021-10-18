@@ -14,8 +14,6 @@ public class StrongDemo {
         example1();
         System.out.println("example2");
         example2();
-//        System.out.println("example3");
-//        example3();
     }
 
     private static void example1() throws InterruptedException {
@@ -53,6 +51,9 @@ public class StrongDemo {
         TimeUnit.SECONDS.sleep(5);
     }
 
+    /**
+     * Этот метод уронит
+     */
     private static void example3() {
         List<String> strings = new ArrayList<>();
         while (true) {
