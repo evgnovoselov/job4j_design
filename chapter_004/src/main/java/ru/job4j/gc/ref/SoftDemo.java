@@ -57,12 +57,9 @@ public class SoftDemo {
         someData.add(new SoftReference<>(new Object()));
         if (someData.get(0).get() != null) {
             System.out.println("unsafe method, someData.get(0).get() != null");
-            // do something
         } else {
             System.out.println("unsafe method, someData.get(0).get() == null");
-            //do something
         }
-        // do something
         Object object = someData.get(0).get();
     }
 
@@ -75,11 +72,9 @@ public class SoftDemo {
         Object strong = someData.get(0).get();
         if (strong != null) {
             System.out.println("safe method, strong != null");
-            // do something
         } else {
             System.out.println("safe method, strong == null");
-            // do something
         }
-        // work with strong
+        Object object = strong;
     }
 }
