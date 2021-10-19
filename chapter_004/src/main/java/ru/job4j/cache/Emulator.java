@@ -18,7 +18,7 @@ public class Emulator {
         while (run) {
             showMenu();
             System.out.print("Выберите пункт меню: ");
-            action = scanner.nextInt();
+            action = Integer.parseInt(scanner.nextLine());
             if (action == 0) {
                 run = false;
             }
@@ -33,6 +33,9 @@ public class Emulator {
         String dir = scanner.nextLine();
         if (Files.isDirectory(Path.of(dir))) {
             cache = new DirFileCache(dir);
+            System.out.printf("Установлена данная директория: %s%n", dir);
+        } else {
+            System.out.printf("Ошибка данной директории не существует: %s%n", dir);
         }
 
     }
