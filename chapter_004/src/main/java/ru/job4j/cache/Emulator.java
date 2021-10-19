@@ -1,29 +1,46 @@
 package ru.job4j.cache;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
  * Класс демонстрирующий работу кеша.
  */
 public class Emulator {
+    private Scanner scanner = new Scanner(System.in);
+    private AbstractCache<String, String> cache = new DirFileCache("./files/chapteer_004/cache");
+
     public static void main(String[] args) {
-        AbstractCache<String, String> cache = new DirFileCache("./files/chapteer_004/cache");
-        System.out.println(cache.get("Names.txt"));
-        System.out.println(cache.get("Address.txt"));
+        new Emulator().run();
+    }
+
+    private void run() {
         boolean run = true;
         int action;
-        Scanner scanner = new Scanner(System.in);
         while (run) {
-            printMenu();
+            showMenu();
             System.out.print("Выберите пункт меню: ");
             action = scanner.nextInt();
             if (action == 0) {
                 run = false;
             }
+            if (action == 1) {
+                changeDirCache();
+            }
         }
     }
 
-    private static void printMenu() {
+    private void changeDirCache() {
+        System.out.print("Введите путь к директории: ");
+        String dir = scanner.nextLine();
+        if (Files.isDirectory(Path.of(dir))) {
+            cache = new DirFileCache(dir);
+        }
+
+    }
+
+    private void showMenu() {
         System.out.println("=== Меню");
         System.out.println("=== 1. Выбрать директорию");
         System.out.println("=== 2. Добавить файл в кеш");
