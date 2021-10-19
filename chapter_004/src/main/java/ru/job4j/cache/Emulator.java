@@ -9,8 +9,7 @@ import java.util.Scanner;
  */
 public class Emulator {
     private AbstractCache<String, String> cache = new DirFileCache("./files/chapter_004/cache");
-    private Scanner scanner = new Scanner(System.in);
-
+    private final Scanner scanner = new Scanner(System.in);
 
     private void run() {
         boolean run = true;
@@ -25,6 +24,12 @@ public class Emulator {
             if (action == 1) {
                 changeDirCache();
             }
+            if (action == 2) {
+                putInCache();
+            }
+            if (action == 3) {
+                showCache();
+            }
         }
     }
 
@@ -37,7 +42,19 @@ public class Emulator {
         } else {
             System.out.printf("Ошибка данной директории не существует: %s%n", dir);
         }
+    }
 
+    private void putInCache() {
+        System.out.print("Введите имя файла для добавление в кеш: ");
+        String file = scanner.nextLine();
+        cache.put(file, null);
+        cache.get(file);
+    }
+
+    private void showCache() {
+        System.out.print("Введите имя файла для получения кеша: ");
+        String file = scanner.nextLine();
+        System.out.println(cache.get(file));
     }
 
     private void showMenu() {
