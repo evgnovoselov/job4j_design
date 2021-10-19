@@ -8,12 +8,9 @@ import java.util.Scanner;
  * Класс демонстрирующий работу кеша.
  */
 public class Emulator {
+    private AbstractCache<String, String> cache = new DirFileCache("./files/chapter_004/cache");
     private Scanner scanner = new Scanner(System.in);
-    private AbstractCache<String, String> cache = new DirFileCache("./files/chapteer_004/cache");
 
-    public static void main(String[] args) {
-        new Emulator().run();
-    }
 
     private void run() {
         boolean run = true;
@@ -46,5 +43,9 @@ public class Emulator {
         System.out.println("=== 2. Добавить файл в кеш");
         System.out.println("=== 3. Получить содержимое файла");
         System.out.println("=== 0. Выйти из программы");
+    }
+
+    public static void main(String[] args) {
+        new Emulator().run();
     }
 }
