@@ -30,7 +30,6 @@ public class DirFileCache extends AbstractCache<String, String> {
                 e.printStackTrace();
             }
             load = stringBuilder.toString();
-            put(key, load);
         }
         return load;
     }
