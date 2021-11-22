@@ -23,7 +23,7 @@ public class MaxMin {
         }
         while (iterator.hasNext()) {
             T current = iterator.next();
-            if (comparator.compare(result, current) > 0) {
+            if (comparator.compare(current, result) > 0) {
                 result = current;
             }
         }
