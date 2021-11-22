@@ -2,11 +2,11 @@ package ru.job4j.kiss;
 
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Класс тестирования получения максимального и минимального значения.
@@ -49,5 +49,15 @@ public class MaxMinTest {
         List<Integer> value = List.of(1, 2, 5, 4, 3);
         Integer expected = 1;
         assertEquals(expected, new MaxMin().min(value, Comparator.naturalOrder()));
+    }
+
+    /**
+     * Проверяем работу метода по получению большего значения по предикату.
+     */
+    @Test
+    public void whenCompareByBiPredicateThenGetValue() {
+        List<Integer> value = List.of(1, 2, 3, 5, 4, 3, 2);
+        Integer expected = 5;
+        assertEquals(expected, new MaxMin().compareBy(value, (integer, integer2) -> integer > integer2));
     }
 }
