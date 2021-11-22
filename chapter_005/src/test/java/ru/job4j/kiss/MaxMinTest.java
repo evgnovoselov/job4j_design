@@ -19,7 +19,7 @@ public class MaxMinTest {
     public void whenNeedMaxThenGetMax() {
         List<Integer> value = List.of(1, 2, 5, 4, 3);
         Integer expected = 5;
-        assertEquals(expected, new MaxMin().max(value, Comparator.reverseOrder()));
+        assertEquals(expected, new MaxMin().max(value, Comparator.naturalOrder()));
     }
 
     /**
@@ -28,7 +28,7 @@ public class MaxMinTest {
     @Test
     public void whenEmptyListThenGetNull() {
         List<Integer> value = List.of();
-        assertNull(new MaxMin().max(value, Comparator.reverseOrder()));
+        assertNull(new MaxMin().max(value, Comparator.naturalOrder()));
     }
 
     /**
@@ -38,7 +38,7 @@ public class MaxMinTest {
     public void whenListHaveOneValueThenGetValue() {
         List<Integer> value = List.of(5);
         Integer expected = 5;
-        assertEquals(expected, new MaxMin().max(value, Comparator.reverseOrder()));
+        assertEquals(expected, new MaxMin().max(value, Comparator.naturalOrder()));
     }
 
     /**
@@ -48,6 +48,6 @@ public class MaxMinTest {
     public void whenNeedMinThenGetMin() {
         List<Integer> value = List.of(1, 2, 5, 4, 3);
         Integer expected = 1;
-        assertEquals(expected, new MaxMin().min(value, Comparator.reverseOrder()));
+        assertEquals(expected, new MaxMin().min(value, Comparator.naturalOrder()));
     }
 }
