@@ -11,7 +11,9 @@ import static org.junit.Assert.assertEquals;
  * Тестирование системы кинотиатра.
  */
 public class CinemaTest {
-
+    /**
+     * Поиск сеансов по предикату в кинотеатре.
+     */
     @Test
     public void find() {
         Cinema cinema = new Cinema3D();
@@ -20,6 +22,9 @@ public class CinemaTest {
         assertEquals(sessions, List.of(new Session3D()));
     }
 
+    /**
+     * Покупка билета в кинотеатре.
+     */
     @Test
     public void buy() {
         Account account = new AccountCinema();
