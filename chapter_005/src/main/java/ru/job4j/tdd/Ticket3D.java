@@ -17,4 +17,24 @@ public class Ticket3D implements Ticket {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public Cinema getCinema() {
+        return new Cinema3D();
+    }
+
+    @Override
+    public Session getSession() {
+        return new Session3D();
+    }
+
+    @Override
+    public int getRow() {
+        return 1;
+    }
+
+    @Override
+    public int getColumn() {
+        return 1;
+    }
 }
