@@ -9,5 +9,5 @@ public interface Boiler {
 
     int getDegree();
 
-    void sendDegree();
+    void sendDegree(int degree);
 }

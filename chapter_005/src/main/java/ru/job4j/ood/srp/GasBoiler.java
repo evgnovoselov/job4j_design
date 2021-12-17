@@ -18,13 +18,14 @@ public class GasBoiler implements Boiler {
     }
 
     @Override
-    public void sendDegree() {
+    public void sendDegree(int degree) {
         System.out.println(degree);
     }
 
     public static void main(String[] args) {
+        int degree = 30;
         Boiler boiler = new GasBoiler();
-        boiler.heat(40);
-        boiler.sendDegree();
+        boiler.heat(degree);
+        boiler.sendDegree(degree);
     }
 }
