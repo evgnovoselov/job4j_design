@@ -24,6 +24,7 @@ public class GasBoiler implements Boiler {
 
     public static void main(String[] args) {
         Boiler boiler = new GasBoiler();
+        boiler.sendDegree(boiler.getDegree());
         boiler.heat(30);
         boiler.sendDegree(boiler.getDegree());
     }
