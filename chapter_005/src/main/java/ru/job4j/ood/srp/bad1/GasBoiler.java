@@ -23,9 +23,8 @@ public class GasBoiler implements Boiler {
     }
 
     public static void main(String[] args) {
-        int degree = 30;
         Boiler boiler = new GasBoiler();
-        boiler.heat(degree);
-        boiler.sendDegree(degree);
+        boiler.heat(30);
+        boiler.sendDegree(boiler.getDegree());
     }
 }
