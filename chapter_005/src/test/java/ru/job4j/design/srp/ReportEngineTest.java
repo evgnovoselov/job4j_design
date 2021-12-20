@@ -69,4 +69,22 @@ public class ReportEngineTest {
                 .append("</html>");
         assertEquals(engine.generate(employee -> true), expected.toString());
     }
+
+    @Test
+    public void whenGeneratedReportChangeSalary() {
+        MemStore store = new MemStore();
+        Calendar now = Calendar.getInstance();
+        Employee worker = new Employee("Ivan", now, now, 123.45);
+        store.add(worker);
+        Report engine = new ReportEngineChangeSalary(store, salary -> String.format("%.2f", salary));
+        StringBuilder expect = new StringBuilder()
+                .append("Name; Hired; Fired; Salary;")
+                .append(System.lineSeparator())
+                .append(worker.getName()).append(";")
+                .append(worker.getHired()).append(";")
+                .append(worker.getFired()).append(";")
+                .append("123,45").append(";")
+                .append(System.lineSeparator());
+        assertEquals(engine.generate(employee -> true), expect.toString());
+    }
 }
