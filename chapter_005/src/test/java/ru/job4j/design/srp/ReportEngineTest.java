@@ -76,14 +76,14 @@ public class ReportEngineTest {
         Calendar now = Calendar.getInstance();
         Employee worker = new Employee("Ivan", now, now, 123.45);
         store.add(worker);
-        Report engine = new ReportEngineChangeSalary(store, salary -> String.format("%.2f", salary));
+        Report engine = new ReportEngineChangeSalary(store, salary -> String.format("%.2f руб.", salary));
         StringBuilder expect = new StringBuilder()
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
                 .append(worker.getName()).append(";")
                 .append(worker.getHired()).append(";")
                 .append(worker.getFired()).append(";")
-                .append("123,45").append(";")
+                .append(String.format("%.2f руб.", worker.getSalary())).append(";")
                 .append(System.lineSeparator());
         assertEquals(engine.generate(employee -> true), expect.toString());
     }
