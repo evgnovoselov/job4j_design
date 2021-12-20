@@ -3,6 +3,9 @@ package ru.job4j.design.srp;
 import java.util.Calendar;
 import java.util.Objects;
 
+/**
+ * Модель сотрудников.
+ */
 public class Employee {
     private String name;
     private Calendar hired;
