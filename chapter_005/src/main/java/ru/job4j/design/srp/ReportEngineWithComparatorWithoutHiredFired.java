@@ -4,6 +4,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Генерация отчета с сортировкой по компаратору и с исключением информации о принятии и увольнении.
+ */
 public class ReportEngineWithComparatorWithoutHiredFired implements Report {
     private final Store store;
     private Comparator<Employee> comparator;

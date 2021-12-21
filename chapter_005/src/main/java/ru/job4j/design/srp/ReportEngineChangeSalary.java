@@ -3,6 +3,9 @@ package ru.job4j.design.srp;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Генерация отчета с изменением вида зарплаты.
+ */
 public class ReportEngineChangeSalary implements Report {
     private final Store store;
     private final Function<Double, String> changedSalary;

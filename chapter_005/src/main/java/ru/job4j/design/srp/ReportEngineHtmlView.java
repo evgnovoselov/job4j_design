@@ -2,6 +2,9 @@ package ru.job4j.design.srp;
 
 import java.util.function.Predicate;
 
+/**
+ * Генерация отчета в виде html.
+ */
 public class ReportEngineHtmlView implements Report {
     private Store store;
 
