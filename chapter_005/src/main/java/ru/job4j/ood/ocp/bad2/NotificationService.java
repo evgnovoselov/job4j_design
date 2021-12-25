@@ -7,6 +7,10 @@ import java.util.List;
  * придется добавлять реализацию отправки уведомления.
  */
 public class NotificationService {
+    /**
+     * Метод не соответствует принципу открытости-закрытости.
+     * @param notifications Список Уведомлений.
+     */
     public void sendNotifications(List<Notification> notifications) {
         notifications.forEach(notification -> {
             if (notification.getServiceType().equals(ServiceType.PC)) {
