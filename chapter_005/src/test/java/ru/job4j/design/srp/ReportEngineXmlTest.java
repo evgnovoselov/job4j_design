@@ -12,6 +12,6 @@ public class ReportEngineXmlTest {
      * Тестирование результата генерации отчета.
      */
     @Test
-    public void generate() {
+    public void whenGenerateXmlReportThenValidReport() {
     }
 }
