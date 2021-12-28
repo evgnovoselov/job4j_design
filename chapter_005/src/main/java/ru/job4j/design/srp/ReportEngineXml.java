@@ -1,5 +1,6 @@
 package ru.job4j.design.srp;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -14,6 +15,7 @@ public class ReportEngineXml implements Report {
 
     @Override
     public String generate(Predicate<Employee> filter) {
+        List<Employee> employees = store.findBy(filter);
         return null;
     }
 }
