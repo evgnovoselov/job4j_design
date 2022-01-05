@@ -2,6 +2,7 @@ package ru.job4j.design.srp;
 
 import org.junit.Test;
 
+import javax.xml.bind.DatatypeConverter;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -43,7 +44,7 @@ public class ReportEngineXmlTest {
         expectedFormat.append("        <salary>400.0</salary>\n");
         expectedFormat.append("    </employee>\n");
         expectedFormat.append("</employees>\n");
-        String expected = String.format(expectedFormat.toString(), "2022-01-07T11:37:15+03:00");
+        String expected = String.format(expectedFormat.toString(), DatatypeConverter.printDateTime(date));
         assertEquals(expected, engine.generate(employee -> true));
     }
 }
