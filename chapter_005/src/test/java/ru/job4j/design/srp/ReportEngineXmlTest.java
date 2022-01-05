@@ -2,8 +2,8 @@ package ru.job4j.design.srp;
 
 import org.junit.Test;
 
-import javax.xml.bind.DatatypeConverter;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,10 +17,10 @@ public class ReportEngineXmlTest {
     @Test
     public void whenGenerateXmlReportThenValidReport() {
         MemStore store = new MemStore();
-        Calendar now = Calendar.getInstance();
-        store.add(new Employee("Evgeny", now, now, 700));
-        store.add(new Employee("Ivan", now, now, 300));
-        store.add(new Employee("Julia", now, now, 400));
+        Calendar date = new GregorianCalendar(2022, Calendar.JANUARY, 7, 11, 37, 15);
+        store.add(new Employee("Evgeny", date, date, 700));
+        store.add(new Employee("Ivan", date, date, 300));
+        store.add(new Employee("Julia", date, date, 400));
         Report engine = new ReportEngineXml(store);
         StringBuilder expectedFormat = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
         expectedFormat.append("<employees>\n");
@@ -43,7 +43,7 @@ public class ReportEngineXmlTest {
         expectedFormat.append("        <salary>400.0</salary>\n");
         expectedFormat.append("    </employee>\n");
         expectedFormat.append("</employees>\n");
-        String expected = String.format(expectedFormat.toString(), DatatypeConverter.printDateTime(now));
+        String expected = String.format(expectedFormat.toString(), "2022-01-07T11:37:15+03:00");
         assertEquals(expected, engine.generate(employee -> true));
     }
 }
