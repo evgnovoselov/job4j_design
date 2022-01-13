@@ -20,34 +20,31 @@ public class App {
                 "На склад срок годности израсходован меньше чем на 25%",
                 warehouse,
                 percent -> percent.compareTo(25) < 1,
-                null
+                0
         );
         controlQuality.addRule(
                 "В магазин срок годности от 25% до 75%",
                 shop,
                 percent -> percent.compareTo(25) > 0 && percent.compareTo(75) <= 0,
-                null
+                0
         );
         controlQuality.addRule(
                 "В магазин со скидкой. Срок годности больше 75%",
                 shop,
                 percent -> percent.compareTo(75) > 0 && percent.compareTo(100) < 0,
-                null
+                5
         );
         controlQuality.addRule(
                 "Утилизация, срок годности вышел",
                 trash,
                 percent -> percent.compareTo(100) >= 0,
-                null
+                0
         );
         System.out.println(controlQuality.getRules());
         controlQuality.distributeFoods(LocalDate.now().plusDays(10), impFoods);
         System.out.println("WH" + warehouse.getFoods());
         System.out.println("SH" + shop.getFoods());
         System.out.println("TRASH" + trash.getFoods());
-        LinkedList<Integer> linkedList = new LinkedList<>(List.of(1, 2, 3, 4, 5, 6, 7));
-        Map<Integer, Integer> nums = new HashMap<>();
-        Set<Map.Entry<Integer, Integer>> entry = nums.entrySet();
     }
 
     public static List<Food> generateProducts() {
