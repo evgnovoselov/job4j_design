@@ -12,9 +12,8 @@ public class Warehouse implements Storage {
     }
 
     @Override
-    public Food remove(Food food) {
-        Food res = null;
-        return null;
+    public boolean remove(Food food) {
+        return foods.remove(food);
     }
 
     @Override

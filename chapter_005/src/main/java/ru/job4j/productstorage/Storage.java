@@ -5,7 +5,7 @@ import java.util.List;
 public interface Storage {
     void add(Food food);
 
-    Food remove(Food food);
+    boolean remove(Food food);
 
     List<Food> getFoods();
 }
