@@ -17,6 +17,52 @@ public class Food {
         this.discount = discount;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public int getExpiryPercentOfDate(LocalDate date) {
+        long lifeDays = expiryDate.toEpochDay() - createDate.toEpochDay();
+        long passedDays = lifeDays - (expiryDate.toEpochDay() - date.toEpochDay());
+        return (int) (passedDays * 100 / lifeDays);
+    }
+
     @Override
     public String toString() {
         return "Food{"
