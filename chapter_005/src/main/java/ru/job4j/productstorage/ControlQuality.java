@@ -1,21 +1,45 @@
 package ru.job4j.productstorage;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Контроллер правил распределения продуктов.
+ */
 public class ControlQuality {
     private List<Rule> rules = new ArrayList<>();
 
+    /**
+     * Добавляет правило.
+     *
+     * @param name     Имя правила.
+     * @param storage  Хранилище для внесения.
+     * @param foodRule Правило фильтрации.
+     * @param discount Изменение скидки продукта.
+     */
     public void addRule(String name, Storage storage, Predicate<Food> foodRule, int discount) {
         Rule rule = new Rule(name, storage, foodRule, discount);
         rules.add(rule);
     }
 
+    /**
+     * Удаляет правило распределения.
+     *
+     * @param index Индекс правила.
+     * @return Успех удаления.
+     */
+    public boolean removeRule(int index) {
+        return rules.remove(index) != null;
+    }
+
+    /**
+     * Получение представления правил.
+     *
+     * @return Карта с индексами и именами правил.
+     */
     public Map<Integer, String> getRules() {
         Map<Integer, String> result = new LinkedHashMap<>();
         for (int i = 0; i < rules.size(); i++) {
@@ -24,10 +48,11 @@ public class ControlQuality {
         return result;
     }
 
-    public boolean removeRule(int index) {
-        return rules.remove(index) != null;
-    }
-
+    /**
+     * Распределение продуктов по хранилищам.
+     *
+     * @param foods Список продуктов.
+     */
     public void distributeFoods(List<Food> foods) {
         for (Food food : foods) {
             for (Rule rule : rules) {
@@ -39,6 +64,9 @@ public class ControlQuality {
         }
     }
 
+    /**
+     * Класс правила.
+     */
     private static class Rule {
         private String name;
         private Storage storage;
