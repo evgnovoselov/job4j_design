@@ -16,32 +16,35 @@ public class App {
         Storage trash = new Trash();
         ControlQuality controlQuality = new ControlQuality();
         System.out.println(controlQuality.getRules());
+        LocalDate date = LocalDate.now().plusDays(10);
         controlQuality.addRule(
                 "На склад срок годности израсходован меньше чем на 25%",
                 warehouse,
-                percent -> percent.compareTo(25) < 1,
+                food -> food.getExpiryPercentOfDate(date) <= 25,
                 0
         );
         controlQuality.addRule(
                 "В магазин срок годности от 25% до 75%",
                 shop,
-                percent -> percent.compareTo(25) > 0 && percent.compareTo(75) <= 0,
+                food -> food.getExpiryPercentOfDate(date) > 25
+                        && food.getExpiryPercentOfDate(date) <= 75,
                 0
         );
         controlQuality.addRule(
                 "В магазин со скидкой. Срок годности больше 75%",
                 shop,
-                percent -> percent.compareTo(75) > 0 && percent.compareTo(100) < 0,
+                food -> food.getExpiryPercentOfDate(date) > 75
+                        && food.getExpiryPercentOfDate(date) < 100,
                 5
         );
         controlQuality.addRule(
                 "Утилизация, срок годности вышел",
                 trash,
-                percent -> percent.compareTo(100) >= 0,
+                food -> food.getExpiryPercentOfDate(date) >= 100,
                 0
         );
         System.out.println(controlQuality.getRules());
-        controlQuality.distributeFoods(LocalDate.now().plusDays(10), impFoods);
+        controlQuality.distributeFoods(impFoods);
         System.out.println("WH" + warehouse.getFoods());
         System.out.println("SH" + shop.getFoods());
         System.out.println("TRASH" + trash.getFoods());

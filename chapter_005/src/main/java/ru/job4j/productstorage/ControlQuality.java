@@ -11,8 +11,8 @@ import java.util.function.Predicate;
 public class ControlQuality {
     private List<Rule> rules = new ArrayList<>();
 
-    public void addRule(String name, Storage storage, Predicate<Integer> percent, int discount) {
-        Rule rule = new Rule(name, storage, percent, discount);
+    public void addRule(String name, Storage storage, Predicate<Food> foodRule, int discount) {
+        Rule rule = new Rule(name, storage, foodRule, discount);
         rules.add(rule);
     }
 
@@ -28,10 +28,10 @@ public class ControlQuality {
         return rules.remove(index) != null;
     }
 
-    public void distributeFoods(LocalDate date, List<Food> foods) {
+    public void distributeFoods(List<Food> foods) {
         for (Food food : foods) {
             for (Rule rule : rules) {
-                if (rule.percentRule.test(food.getExpiryPercentOfDate(date))) {
+                if (rule.foodRule.test(food)) {
                     food.setDiscount(rule.discount);
                     rule.storage.add(food);
                 }
@@ -42,13 +42,13 @@ public class ControlQuality {
     private static class Rule {
         private String name;
         private Storage storage;
-        private Predicate<Integer> percentRule;
+        private Predicate<Food> foodRule;
         private int discount;
 
-        public Rule(String name, Storage storage, Predicate<Integer> percentRule, int discount) {
+        public Rule(String name, Storage storage, Predicate<Food> foodRule, int discount) {
             this.name = name;
             this.storage = storage;
-            this.percentRule = percentRule;
+            this.foodRule = foodRule;
             this.discount = discount;
         }
     }
