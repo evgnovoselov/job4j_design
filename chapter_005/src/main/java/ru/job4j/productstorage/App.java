@@ -1,10 +1,7 @@
 package ru.job4j.productstorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class App {
@@ -17,16 +14,40 @@ public class App {
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
         Storage trash = new Trash();
-        Map<Storage, Predicate<Integer>> storageRules = new HashMap<>(Map.of(
-                warehouse, percent -> percent.compareTo(25) < 1,
-                shop, percent -> percent.compareTo(25) > 0 && percent.compareTo(100) < 0,
-                trash, percent -> percent.compareTo(100) >= 0
-        ));
-        ControlQuality controlQuality = new ControlQuality(storageRules);
+        ControlQuality controlQuality = new ControlQuality();
+        System.out.println(controlQuality.getRules());
+        controlQuality.addRule(
+                "На склад срок годности израсходован меньше чем на 25%",
+                warehouse,
+                percent -> percent.compareTo(25) < 1,
+                null
+        );
+        controlQuality.addRule(
+                "В магазин срок годности от 25% до 75%",
+                shop,
+                percent -> percent.compareTo(25) > 0 && percent.compareTo(75) <= 0,
+                null
+        );
+        controlQuality.addRule(
+                "В магазин со скидкой. Срок годности больше 75%",
+                shop,
+                percent -> percent.compareTo(75) > 0 && percent.compareTo(100) < 0,
+                null
+        );
+        controlQuality.addRule(
+                "Утилизация, срок годности вышел",
+                trash,
+                percent -> percent.compareTo(100) >= 0,
+                null
+        );
+        System.out.println(controlQuality.getRules());
         controlQuality.distributeFoods(LocalDate.now().plusDays(10), impFoods);
         System.out.println("WH" + warehouse.getFoods());
         System.out.println("SH" + shop.getFoods());
         System.out.println("TRASH" + trash.getFoods());
+        LinkedList<Integer> linkedList = new LinkedList<>(List.of(1, 2, 3, 4, 5, 6, 7));
+        Map<Integer, Integer> nums = new HashMap<>();
+        Set<Map.Entry<Integer, Integer>> entry = nums.entrySet();
     }
 
     public static List<Food> generateProducts() {
