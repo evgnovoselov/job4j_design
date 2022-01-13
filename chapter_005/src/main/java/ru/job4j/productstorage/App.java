@@ -2,16 +2,31 @@ package ru.job4j.productstorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class App {
     public static void main(String[] args) {
         List<Food> impFoods = generateProducts();
-        LocalDate date = LocalDate.now();
-        date = date.plusDays(10);
         for (Food food : impFoods) {
-            System.out.println(food.getExpiryPercentOfDate(date));
+            System.out.print(food.getName() + " = ");
+            System.out.println(food.getExpiryPercentOfDate(LocalDate.now().plusDays(10)));
         }
+        Storage warehouse = new Warehouse();
+        Storage shop = new Shop();
+        Storage trash = new Trash();
+        Map<Storage, Predicate<Integer>> storageRules = new HashMap<>(Map.of(
+                warehouse, percent -> percent.compareTo(25) < 1,
+                shop, percent -> percent.compareTo(25) > 0 && percent.compareTo(100) < 0,
+                trash, percent -> percent.compareTo(100) >= 0
+        ));
+        ControlQuality controlQuality = new ControlQuality(storageRules);
+        controlQuality.distributeFoods(LocalDate.now().plusDays(10), impFoods);
+        System.out.println("WH" + warehouse.getFoods());
+        System.out.println("SH" + shop.getFoods());
+        System.out.println("TRASH" + trash.getFoods());
     }
 
     public static List<Food> generateProducts() {
