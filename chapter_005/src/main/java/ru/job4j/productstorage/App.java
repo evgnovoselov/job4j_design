@@ -50,46 +50,29 @@ public class App {
 
     public static List<? extends Food> generateProducts() {
         return new ArrayList<>(List.of(
-                new Seafood(
-                        "Креветки",
+                new Seafood("Креветки",
                         LocalDate.now(),
                         LocalDate.now().plusDays(30),
-                        100,
-                        0
-                ),
-                new Seafood(
-                        "Форель",
+                        100),
+                new Seafood("Форель",
                         LocalDate.now(),
                         LocalDate.now().plusDays(12),
-                        100,
-                        0
-                ),
-                new Chips(
-                        "Чипсы Принглс",
+                        100),
+                new Chips("Чипсы Принглс",
                         LocalDate.now(),
                         LocalDate.now().plusDays(70),
-                        100,
-                        0
-                ),
-                new Chocolate(
-                        "Конфеты",
+                        100),
+                new Chocolate("Конфеты",
                         LocalDate.now(),
                         LocalDate.now().plusDays(10),
-                        100,
-                        0
-                ),
-                new Chocolate(
-                        "Сникерс",
+                        100),
+                new Chocolate("Сникерс",
                         LocalDate.now(),
                         LocalDate.now().plusDays(10),
-                        100,
-                        0
-                ),
+                        100),
                 new Fruit("Яблоки",
                         LocalDate.now(),
                         LocalDate.now().plusDays(13),
-                        100,
-                        0)
-        ));
+                        100)));
     }
 }
