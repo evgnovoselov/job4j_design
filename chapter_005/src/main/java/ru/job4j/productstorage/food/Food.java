@@ -1,4 +1,4 @@
-package ru.job4j.productstorage;
+package ru.job4j.productstorage.food;
 
 import java.time.LocalDate;
 
@@ -8,6 +8,10 @@ public class Food {
     private LocalDate expiryDate;
     private double price;
     private int discount;
+
+    public Food(String name, LocalDate createDate, LocalDate expiryDate, double price) {
+        this(name, createDate, expiryDate, price, 0);
+    }
 
     public Food(String name, LocalDate createDate, LocalDate expiryDate, double price, int discount) {
         if (expiryDate.toEpochDay() - createDate.toEpochDay() <= 0) {
@@ -90,7 +94,7 @@ public class Food {
 
     @Override
     public String toString() {
-        return "Food{"
+        return this.getClass().getSimpleName() + "{"
                 + "name='" + name + '\''
                 + ", createDate=" + createDate
                 + ", expiryDate=" + expiryDate

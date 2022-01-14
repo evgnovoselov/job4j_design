@@ -1,4 +1,6 @@
-package ru.job4j.productstorage;
+package ru.job4j.productstorage.storage;
+
+import ru.job4j.productstorage.food.Food;
 
 import java.util.List;
 

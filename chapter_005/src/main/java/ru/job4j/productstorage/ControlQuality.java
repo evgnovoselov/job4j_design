@@ -1,5 +1,8 @@
 package ru.job4j.productstorage;
 
+import ru.job4j.productstorage.food.Food;
+import ru.job4j.productstorage.storage.Storage;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,7 +56,7 @@ public class ControlQuality {
      *
      * @param foods Список продуктов.
      */
-    public void distributeFoods(List<Food> foods) {
+    public void distributeFoods(List<? extends Food> foods) {
         for (Food food : foods) {
             for (Rule rule : rules) {
                 if (rule.foodRule.test(food)) {

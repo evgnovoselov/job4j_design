@@ -1,12 +1,18 @@
 package ru.job4j.productstorage;
 
+import ru.job4j.productstorage.food.*;
+import ru.job4j.productstorage.storage.Shop;
+import ru.job4j.productstorage.storage.Storage;
+import ru.job4j.productstorage.storage.Trash;
+import ru.job4j.productstorage.storage.Warehouse;
+
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        List<Food> impFoods = generateProducts();
+        List<? extends Food> impFoods = generateProducts();
         for (Food food : impFoods) {
             System.out.print(food.getName() + " = ");
             System.out.println(food.getExpiryPercentOfDate(LocalDate.now().plusDays(10)));
@@ -42,50 +48,48 @@ public class App {
         System.out.println("TRASH" + trash.getFoods());
     }
 
-    public static List<Food> generateProducts() {
+    public static List<? extends Food> generateProducts() {
         return new ArrayList<>(List.of(
-                new Food(
+                new Seafood(
                         "Креветки",
                         LocalDate.now(),
                         LocalDate.now().plusDays(30),
                         100,
                         0
                 ),
-                new Food(
+                new Seafood(
                         "Форель",
                         LocalDate.now(),
                         LocalDate.now().plusDays(12),
                         100,
                         0
                 ),
-                new Food(
+                new Chips(
                         "Чипсы Принглс",
                         LocalDate.now(),
                         LocalDate.now().plusDays(70),
                         100,
                         0
                 ),
-                new Food(
+                new Chocolate(
                         "Конфеты",
                         LocalDate.now(),
                         LocalDate.now().plusDays(10),
                         100,
                         0
                 ),
-                new Food(
+                new Chocolate(
                         "Сникерс",
                         LocalDate.now(),
                         LocalDate.now().plusDays(10),
                         100,
                         0
                 ),
-                new Food(
-                        "Яблоки",
+                new Fruit("Яблоки",
                         LocalDate.now(),
                         LocalDate.now().plusDays(13),
                         100,
-                        0
-                )
+                        0)
         ));
     }
 }
