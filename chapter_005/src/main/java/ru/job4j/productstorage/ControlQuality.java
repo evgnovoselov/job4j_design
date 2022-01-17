@@ -3,16 +3,13 @@ package ru.job4j.productstorage;
 import ru.job4j.productstorage.distributionoperation.DistributionOperation;
 import ru.job4j.productstorage.storage.Storage;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Контроллер правил распределения продуктов.
  */
 public class ControlQuality {
-    private List<DistributionOperation> operations = new ArrayList<>();
+    private List<DistributionOperation> operations;
 
     public ControlQuality(List<DistributionOperation> operations) {
         this.operations = operations;
@@ -23,12 +20,10 @@ public class ControlQuality {
      *
      * @param storages Список хранилещей для распределения продуктов.
      */
-    public void distributeFoods(List<Storage> storages) {
+    public void distributeFoodsIn(List<Storage> storages) {
         for (Storage storage : storages) {
             for (DistributionOperation operation : operations) {
-                if (!storage.equals(operation.getTo())) {
-                    operation.toDistribute(storage);
-                }
+                operation.toDistribute(storage);
             }
         }
     }

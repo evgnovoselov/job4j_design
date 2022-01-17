@@ -6,6 +6,9 @@ import ru.job4j.productstorage.storage.Storage;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
+/**
+ * Класс перемещает продукты из from в to по условию where и меняет значение скидки.
+ */
 public class DistributeStorageChangeDiscount implements DistributionOperation {
     private Storage to;
     private Predicate<Food> where;
@@ -28,6 +31,10 @@ public class DistributeStorageChangeDiscount implements DistributionOperation {
         while (iterator.hasNext()) {
             Food food = iterator.next();
             if (where.test(food)) {
+                if (from.equals(to)) {
+                    food.setDiscount(discount);
+                    continue;
+                }
                 iterator.remove();
                 food.setDiscount(discount);
                 to.add(food);
