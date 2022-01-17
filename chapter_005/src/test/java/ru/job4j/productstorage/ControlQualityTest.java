@@ -7,6 +7,7 @@ import ru.job4j.productstorage.distributionoperation.DistributionOperation;
 import ru.job4j.productstorage.food.*;
 import ru.job4j.productstorage.storage.Shop;
 import ru.job4j.productstorage.storage.Storage;
+import ru.job4j.productstorage.storage.Trash;
 import ru.job4j.productstorage.storage.Warehouse;
 
 import java.time.LocalDate;
@@ -18,15 +19,70 @@ import static org.junit.Assert.*;
 
 public class ControlQualityTest {
     /**
-     * Тестирование функционала перераспределения еды в хранилище.
+     * Тестирование функционала перераспределения еды в хранилищах warehouse и shop.
      */
     @Test
-    public void distributeFoods() {
+    public void whenDistributeFoodsFromStoragesThenStoragesHaveFoods() {
         LocalDate date = LocalDate.now().plusDays(10);
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
         List<? extends Food> foods = generateProducts();
-        foods.forEach(warehouse::add);
+        warehouse.add(foods.get(0));
+        shop.add(foods.get(1));
+        shop.add(foods.get(2));
+        warehouse.add(foods.get(3));
+        warehouse.add(foods.get(4));
+        shop.add(foods.get(5));
+        List<String> expected = List.of("Креветки : 33",
+                "Конфеты : 100",
+                "Сникерс : 100");
+        List<String> actual = warehouse.getFoods().stream()
+                .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
+        expected = List.of("Форель : 83",
+                "Чипсы Принглс : 14",
+                "Яблоки : 76");
+        actual = shop.getFoods().stream()
+                .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
+        List<DistributionOperation> operations = List.of(
+                new DistributeStorage(warehouse, food -> food.getExpiryPercentOfDate(date) <= 25),
+                new DistributeStorage(shop, food -> food.getExpiryPercentOfDate(date) > 25
+                        && food.getExpiryPercentOfDate(date) <= 75)
+        );
+        ControlQuality controlQuality = new ControlQuality(operations);
+        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
+        expected = List.of("Конфеты : 100", "Сникерс : 100", "Чипсы Принглс : 14");
+        actual = warehouse.getFoods().stream()
+                .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
+        expected = List.of("Форель : 83",
+                "Яблоки : 76",
+                "Креветки : 33");
+        actual = shop.getFoods().stream()
+                .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
+    }
+
+    /**
+     * Проверка когда в хранилищах есть просроченные товары, они отправляются в хранилище trash.
+     */
+    public void whenStoragesHaveTrashThenDeletedFoods() {
+        LocalDate date = LocalDate.now().plusDays(10);
+        Storage warehouse = new Warehouse();
+        Storage shop = new Shop();
+        Storage trash = new Trash();
+        List<? extends Food> foods = generateProducts();
+        warehouse.add(foods.get(0));
+        shop.add(foods.get(1));
+        shop.add(foods.get(2));
+        warehouse.add(foods.get(3));
+        warehouse.add(foods.get(4));
+        warehouse.add(foods.get(5));
         List<String> expected = List.of("Креветки : 33",
                 "Форель : 83",
                 "Чипсы Принглс : 14",
