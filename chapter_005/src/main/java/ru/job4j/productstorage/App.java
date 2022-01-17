@@ -1,5 +1,7 @@
 package ru.job4j.productstorage;
 
+import ru.job4j.productstorage.distributionoperation.DistributeStorage;
+import ru.job4j.productstorage.distributionoperation.DistributeStorageChangeDiscount;
 import ru.job4j.productstorage.food.*;
 import ru.job4j.productstorage.storage.Shop;
 import ru.job4j.productstorage.storage.Storage;
@@ -12,37 +14,30 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) {
+        Storage warehouse = new Warehouse();
+        Storage shop = new Shop();
+        Storage trash = new Trash();
         List<? extends Food> impFoods = generateProducts();
         for (Food food : impFoods) {
             System.out.print(food.getName() + " = ");
             System.out.println(food.getExpiryPercentOfDate(LocalDate.now().plusDays(10)));
         }
-        Storage warehouse = new Warehouse();
-        Storage shop = new Shop();
-        Storage trash = new Trash();
+        impFoods.forEach(warehouse::add);
         ControlQuality controlQuality = new ControlQuality();
         System.out.println(controlQuality.getRules());
         LocalDate date = LocalDate.now().plusDays(10);
         controlQuality.addRule("На склад срок годности израсходован меньше чем на 25%",
-                warehouse,
-                food -> food.getExpiryPercentOfDate(date) <= 25,
-                0);
+                new DistributeStorage(warehouse, food -> food.getExpiryPercentOfDate(date) <= 25));
         controlQuality.addRule("В магазин срок годности от 25% до 75%",
-                shop,
-                food -> food.getExpiryPercentOfDate(date) > 25
-                        && food.getExpiryPercentOfDate(date) <= 75,
-                0);
+                new DistributeStorage(shop, food -> food.getExpiryPercentOfDate(date) > 25
+                        && food.getExpiryPercentOfDate(date) <= 75));
         controlQuality.addRule("В магазин со скидкой. Срок годности больше 75%",
-                shop,
-                food -> food.getExpiryPercentOfDate(date) > 75
-                        && food.getExpiryPercentOfDate(date) < 100,
-                5);
+                new DistributeStorageChangeDiscount(shop, food -> food.getExpiryPercentOfDate(date) > 75
+                        && food.getExpiryPercentOfDate(date) < 100, 5));
         controlQuality.addRule("Утилизация, срок годности вышел",
-                trash,
-                food -> food.getExpiryPercentOfDate(date) >= 100,
-                0);
+                new DistributeStorage(trash, food -> food.getExpiryPercentOfDate(date) >= 100));
         System.out.println(controlQuality.getRules());
-        controlQuality.distributeFoods(impFoods);
+        controlQuality.distributeFoods(List.of(warehouse, shop));
         System.out.println("WH" + warehouse.getFoods());
         System.out.println("SH" + shop.getFoods());
         System.out.println("TRASH" + trash.getFoods());

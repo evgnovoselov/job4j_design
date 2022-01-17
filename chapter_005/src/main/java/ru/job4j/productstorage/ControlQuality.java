@@ -1,13 +1,12 @@
 package ru.job4j.productstorage;
 
-import ru.job4j.productstorage.food.Food;
+import ru.job4j.productstorage.distributionoperation.ControlQualityOperation;
 import ru.job4j.productstorage.storage.Storage;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * Контроллер правил распределения продуктов.
@@ -18,13 +17,10 @@ public class ControlQuality {
     /**
      * Добавляет правило.
      *
-     * @param name     Имя правила.
-     * @param storage  Хранилище для внесения.
-     * @param foodRule Правило фильтрации.
-     * @param discount Изменение скидки продукта.
+     * @param name Имя правила.
      */
-    public void addRule(String name, Storage storage, Predicate<Food> foodRule, int discount) {
-        Rule rule = new Rule(name, storage, foodRule, discount);
+    public void addRule(String name, ControlQualityOperation operation) {
+        Rule rule = new Rule(name, operation);
         rules.add(rule);
     }
 
@@ -54,14 +50,13 @@ public class ControlQuality {
     /**
      * Распределение продуктов по хранилищам.
      *
-     * @param foods Список продуктов.
+     * @param storages Список хранилещей для распределения продуктов.
      */
-    public void distributeFoods(List<? extends Food> foods) {
-        for (Food food : foods) {
+    public void distributeFoods(List<Storage> storages) {
+        for (Storage storage : storages) {
             for (Rule rule : rules) {
-                if (rule.foodRule.test(food)) {
-                    food.setDiscount(rule.discount);
-                    rule.storage.add(food);
+                if (!storage.equals(rule.operation.getTo())) {
+                    rule.operation.toDistribute(storage);
                 }
             }
         }
@@ -72,15 +67,11 @@ public class ControlQuality {
      */
     private static class Rule {
         private String name;
-        private Storage storage;
-        private Predicate<Food> foodRule;
-        private int discount;
+        private ControlQualityOperation operation;
 
-        public Rule(String name, Storage storage, Predicate<Food> foodRule, int discount) {
+        public Rule(String name, ControlQualityOperation operation) {
             this.name = name;
-            this.storage = storage;
-            this.foodRule = foodRule;
-            this.discount = discount;
+            this.operation = operation;
         }
     }
 }
