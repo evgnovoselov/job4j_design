@@ -71,25 +71,30 @@ public class ControlQualityTest {
     /**
      * Проверка когда в хранилищах есть просроченные товары, они отправляются в хранилище trash.
      */
+    @Test
     public void whenStoragesHaveTrashThenDeletedFoods() {
         LocalDate date = LocalDate.now().plusDays(10);
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
-        Storage trash = new Trash();
         List<? extends Food> foods = generateProducts();
         warehouse.add(foods.get(0));
         shop.add(foods.get(1));
         shop.add(foods.get(2));
         warehouse.add(foods.get(3));
-        warehouse.add(foods.get(4));
-        warehouse.add(foods.get(5));
+        shop.add(foods.get(4));
+        shop.add(foods.get(5));
         List<String> expected = List.of("Креветки : 33",
-                "Форель : 83",
-                "Чипсы Принглс : 14",
-                "Конфеты : 100",
-                "Сникерс : 100",
-                "Яблоки : 76");
+                "Конфеты : 100");
         List<String> actual = warehouse.getFoods().stream()
+                .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
+        expected = List.of("Форель : 83",
+                "Чипсы Принглс : 14",
+                "Сникерс : 100",
+                "Яблоки : 76"
+                );
+        actual = shop.getFoods().stream()
                 .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
                 .collect(Collectors.toList());
         assertEquals(expected, actual);
@@ -100,12 +105,15 @@ public class ControlQualityTest {
         );
         ControlQuality controlQuality = new ControlQuality(operations);
         controlQuality.distributeFoodsIn(List.of(warehouse, shop));
-        expected = List.of("Форель : 83", "Чипсы Принглс : 14", "Конфеты : 100", "Сникерс : 100", "Яблоки : 76");
+        expected = List.of("Конфеты : 100", "Чипсы Принглс : 14");
         actual = warehouse.getFoods().stream()
                 .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
                 .collect(Collectors.toList());
         assertEquals(expected, actual);
-        expected = List.of("Креветки : 33");
+        expected = List.of("Форель : 83",
+                "Сникерс : 100",
+                "Яблоки : 76",
+                "Креветки : 33");
         actual = shop.getFoods().stream()
                 .map(food -> String.format("%s : %s", food.getName(), food.getExpiryPercentOfDate(date)))
                 .collect(Collectors.toList());
