@@ -6,7 +6,7 @@ import ru.job4j.productstorage.storage.Storage;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class DistributeStorageChangeDiscount implements ControlQualityOperation {
+public class DistributeStorageChangeDiscount implements DistributionOperation {
     private Storage to;
     private Predicate<Food> where;
     private int discount;
