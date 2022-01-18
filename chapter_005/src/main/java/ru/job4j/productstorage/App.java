@@ -40,7 +40,7 @@ public class App {
         System.out.println("TRASH" + trash.getFoods());
     }
 
-    public static List<? extends Food> generateProducts() {
+    private static List<? extends Food> generateProducts() {
         return new ArrayList<>(List.of(
                 new Seafood("Креветки",
                         LocalDate.now(),
