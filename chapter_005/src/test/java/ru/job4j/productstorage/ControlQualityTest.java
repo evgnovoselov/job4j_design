@@ -93,6 +93,52 @@ public class ControlQualityTest {
         expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
         actual = getFormattedFoods(shop, date);
         assertEquals(expected, actual);
+        expected = List.of();
+        actual = getFormattedFoods(trash, date);
+        assertEquals(expected, actual);
+    }
+
+    /**
+     * Проверка работы когда в хранилищах есть товары необходимые для продажи со скидкой,
+     * перемещение и выставление скидки.
+     */
+    @Test
+    public void whenHaveFoodsNeedDiscount() {
+        LocalDate date = LocalDate.now().plusDays(10);
+        List<? extends Food> foods = generateProducts();
+        Storage warehouse = new Warehouse();
+        Storage shop = new Shop();
+        Storage trash = new Trash();
+        warehouse.add(foods.get(0));
+        shop.add(foods.get(1));
+        shop.add(foods.get(2));
+        warehouse.add(foods.get(3));
+        shop.add(foods.get(4));
+        warehouse.add(foods.get(5));
+        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Яблоки : 76 : 0%");
+        List<String> actual = getFormattedFoods(warehouse, date);
+        assertEquals(expected, actual);
+        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%");
+        actual = getFormattedFoods(shop, date);
+        assertEquals(expected, actual);
+        expected = List.of();
+        actual = getFormattedFoods(trash, date);
+        assertEquals(expected, actual);
+        List<DistributionOperation> operations = List.of(
+                new DistributeStorageChangeDiscount(shop, food -> food.getExpiryPercentOfDate(date) > 75
+                        && food.getExpiryPercentOfDate(date) < 100, 5)
+        );
+        ControlQuality controlQuality = new ControlQuality(operations);
+        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
+        expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
+        actual = getFormattedFoods(warehouse, date);
+        assertEquals(expected, actual);
+        expected = List.of("Форель : 83 : 5%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 5%");
+        actual = getFormattedFoods(shop, date);
+        assertEquals(expected, actual);
+        expected = List.of();
+        actual = getFormattedFoods(trash, date);
+        assertEquals(expected, actual);
     }
 
     private List<String> getFormattedFoods(Storage storage, LocalDate date) {
