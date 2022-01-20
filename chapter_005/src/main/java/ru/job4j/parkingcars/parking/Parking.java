@@ -10,18 +10,18 @@ import java.util.function.Predicate;
  */
 public interface Parking {
     /**
-     * Получение размера парковки.
-     *
-     * @return Размер парковки.
-     */
-    int getSpaces();
-
-    /**
-     * Получение свободных мест парковки.
+     * Получение свободных мест парковки для легковых машин.
      *
      * @return Свободных мест на парковке.
      */
-    int getFreeSpaces();
+    int getPassengerCarFreeSpaces();
+
+    /**
+     * Получение свободных мест для грузовых машин.
+     *
+     * @return Количество свободных мест для грузовых машин на парковке.
+     */
+    int getTruckFreeSpaces();
 
     /**
      * Получение машин по условию.
@@ -31,14 +31,7 @@ public interface Parking {
     List<Car> getCars(Predicate<Car> predicate);
 
     /**
-     * Места только для грузовых машин.
-     *
-     * @return Места только для грузовых машин.
-     */
-    boolean isSpacesForTruckCar();
-
-    /**
-     * Есть ли места для машины.
+     * Есть ли место для машины.
      *
      * @param car Машина
      * @return Есть ли место.
