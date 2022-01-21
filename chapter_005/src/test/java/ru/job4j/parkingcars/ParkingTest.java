@@ -91,6 +91,6 @@ public class ParkingTest {
         assertFalse(parking.addCar(cars.get(1)));
         assertEquals(2, parking.getPassengerCarFreeSpaces());
         assertEquals(0, parking.getTruckFreeSpaces());
-        assertEquals(cars, List.of(cars.get(0)));
+        assertEquals(List.of(cars.get(0)), parking.getCars(car -> true));
     }
 }
