@@ -5,6 +5,7 @@ import ru.job4j.parkingcars.car.Car;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class FirstParking implements Parking {
     /**
@@ -41,16 +42,33 @@ public class FirstParking implements Parking {
 
     @Override
     public List<Car> getCars(Predicate<Car> predicate) {
-        return null;
+        return cars.stream().filter(predicate).collect(Collectors.toList());
     }
 
     @Override
     public boolean isThereSpaceForCar(Car car) {
-        return false;
+        boolean result = false;
+        if (car.getSize() > 1 && truckFreeSpaces > 0) {
+            result = true;
+        } else if (passengerCarFreeSpaces >= car.getSize()) {
+            result = true;
+        }
+        return result;
     }
 
     @Override
     public boolean addCar(Car car) {
-        return true;
+        boolean result = false;
+        if (car.getSize() > 1 && truckFreeSpaces >= 1) {
+            truckFreeSpaces -= 1;
+            cars.add(car);
+            result = true;
+        }
+        if (!result && passengerCarFreeSpaces >= car.getSize()) {
+            passengerCarFreeSpaces -= car.getSize();
+            cars.add(car);
+            result = true;
+        }
+        return result;
     }
 }
