@@ -9,6 +9,11 @@ public class Warehouse implements Storage {
     private final List<Food> foods = new ArrayList<>();
 
     @Override
+    public boolean accept(Food food) {
+        return false;
+    }
+
+    @Override
     public void add(Food food) {
         foods.add(food);
     }

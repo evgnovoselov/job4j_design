@@ -9,6 +9,11 @@ import java.util.List;
  */
 public class Trash implements Storage {
     @Override
+    public boolean accept(Food food) {
+        return false;
+    }
+
+    @Override
     public void add(Food food) {
     }
 
