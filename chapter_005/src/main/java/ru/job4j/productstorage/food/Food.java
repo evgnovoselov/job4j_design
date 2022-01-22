@@ -86,12 +86,6 @@ public class Food {
         }
     }
 
-    public int getExpiryPercentOfDate(LocalDate date) {
-        long lifeDays = expiryDate.toEpochDay() - createDate.toEpochDay();
-        long passedDays = lifeDays - (expiryDate.toEpochDay() - date.toEpochDay());
-        return (int) (passedDays * 100 / lifeDays);
-    }
-
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "{"
