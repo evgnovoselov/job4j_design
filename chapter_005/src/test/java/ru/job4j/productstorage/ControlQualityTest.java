@@ -1,9 +1,6 @@
 package ru.job4j.productstorage;
 
 import org.junit.Test;
-import ru.job4j.productstorage.distributionoperation.DistributeStorage;
-import ru.job4j.productstorage.distributionoperation.DistributeStorageChangeDiscount;
-import ru.job4j.productstorage.distributionoperation.DistributionOperation;
 import ru.job4j.productstorage.food.*;
 import ru.job4j.productstorage.storage.Shop;
 import ru.job4j.productstorage.storage.Storage;
@@ -15,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ControlQualityTest {
     /**
@@ -23,32 +20,18 @@ public class ControlQualityTest {
      */
     @Test
     public void whenDistributeFoodsFromStoragesThenStoragesHaveFoods() {
-        List<? extends Food> foods = generateProducts();
+        List<String> expected;
+        List<String> actual;
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
-        warehouse.add(foods.get(0));
-        shop.add(foods.get(1));
-        shop.add(foods.get(2));
-        warehouse.add(foods.get(3));
-        warehouse.add(foods.get(4));
-        shop.add(foods.get(5));
-        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Сникерс : 100 : 0%");
-        List<String> actual = getFormattedFoods(warehouse);
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Яблоки : 76 : 0%");
-        actual = getFormattedFoods(shop);
-        assertEquals(expected, actual);
-        List<DistributionOperation> operations = List.of(
-                new DistributeStorage(warehouse, food -> warehouse.getExpiryPercentBy(food) <= 25),
-                new DistributeStorage(shop, food -> warehouse.getExpiryPercentBy(food) > 25
-                        && shop.getExpiryPercentBy(food) <= 75)
-        );
-        ControlQuality controlQuality = new ControlQuality(operations);
-        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
-        expected = List.of("Конфеты : 100 : 0%", "Сникерс : 100 : 0%", "Чипсы Принглс : 14 : 0%");
+        List<? extends Food> foods = generateProducts();
+        List<Storage> storages = List.of(warehouse, shop);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
+        expected = List.of("Чипсы Принглс : 14 : 0%");
         actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
+        expected = List.of("Креветки : 33 : 0%", "Форель : 83 : 10%", "Яблоки : 76 : 10%");
         actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
     }
@@ -58,37 +41,19 @@ public class ControlQualityTest {
      */
     @Test
     public void whenStoragesHaveTrashThenDeletedFoods() {
+        List<String> expected;
+        List<String> actual;
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
         Storage trash = new Trash();
-        warehouse.add(foods.get(0));
-        shop.add(foods.get(1));
-        shop.add(foods.get(2));
-        warehouse.add(foods.get(3));
-        shop.add(foods.get(4));
-        shop.add(foods.get(5));
-        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
-        List<String> actual = getFormattedFoods(warehouse);
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 0%");
-        actual = getFormattedFoods(shop);
-        assertEquals(expected, actual);
-        expected = List.of();
-        actual = getFormattedFoods(trash);
-        assertEquals(expected, actual);
-        List<DistributionOperation> operations = List.of(
-                new DistributeStorage(warehouse, food -> warehouse.getExpiryPercentBy(food) <= 25),
-                new DistributeStorage(shop, food -> shop.getExpiryPercentBy(food) > 25
-                        && shop.getExpiryPercentBy(food) <= 75),
-                new DistributeStorage(trash, food -> trash.getExpiryPercentBy(food) >= 100)
-        );
-        ControlQuality controlQuality = new ControlQuality(operations);
-        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
+        List<Storage> storages = List.of(warehouse, shop, trash);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
         expected = List.of("Чипсы Принглс : 14 : 0%");
         actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
+        expected = List.of("Креветки : 33 : 0%", "Форель : 83 : 10%", "Яблоки : 76 : 10%");
         actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
@@ -102,35 +67,19 @@ public class ControlQualityTest {
      */
     @Test
     public void whenHaveFoodsNeedDiscount() {
+        List<String> expected;
+        List<String> actual;
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
         Storage trash = new Trash();
-        warehouse.add(foods.get(0));
-        shop.add(foods.get(1));
-        shop.add(foods.get(2));
-        warehouse.add(foods.get(3));
-        shop.add(foods.get(4));
-        warehouse.add(foods.get(5));
-        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Яблоки : 76 : 0%");
-        List<String> actual = getFormattedFoods(warehouse);
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%");
-        actual = getFormattedFoods(shop);
-        assertEquals(expected, actual);
-        expected = List.of();
-        actual = getFormattedFoods(trash);
-        assertEquals(expected, actual);
-        List<DistributionOperation> operations = List.of(
-                new DistributeStorageChangeDiscount(shop, food -> shop.getExpiryPercentBy(food) > 75
-                        && shop.getExpiryPercentBy(food) < 100, 5)
-        );
-        ControlQuality controlQuality = new ControlQuality(operations);
-        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
-        expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
+        List<Storage> storages = List.of(warehouse, shop, trash);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
+        expected = List.of("Чипсы Принглс : 14 : 0%");
         actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 5%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 5%");
+        expected = List.of("Креветки : 33 : 0%", "Форель : 83 : 10%", "Яблоки : 76 : 10%");
         actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
