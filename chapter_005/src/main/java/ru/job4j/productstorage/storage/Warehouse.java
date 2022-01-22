@@ -10,12 +10,12 @@ public class Warehouse implements Storage {
 
     @Override
     public boolean accept(Food food) {
-        return false;
+        return getExpiryPercentBy(food) < 25;
     }
 
     @Override
     public boolean add(Food food) {
-        return foods.add(food);
+        return accept(food) && foods.add(food);
     }
 
     @Override

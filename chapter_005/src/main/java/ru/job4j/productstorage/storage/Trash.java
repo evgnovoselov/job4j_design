@@ -10,12 +10,12 @@ import java.util.List;
 public class Trash implements Storage {
     @Override
     public boolean accept(Food food) {
-        return false;
+        return getExpiryPercentBy(food) >= 100;
     }
 
     @Override
     public boolean add(Food food) {
-        return true;
+        return accept(food);
     }
 
     @Override

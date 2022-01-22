@@ -10,12 +10,21 @@ public class Shop implements Storage {
 
     @Override
     public boolean accept(Food food) {
-        return false;
+        boolean result = false;
+        int foodExpiryPercent = getExpiryPercentBy(food);
+        if (foodExpiryPercent >= 75 && foodExpiryPercent < 100) {
+            food.setDiscount(10);
+            result = true;
+        }
+        if (!result && foodExpiryPercent >= 25 && foodExpiryPercent < 75) {
+            result = true;
+        }
+        return result;
     }
 
     @Override
     public boolean add(Food food) {
-        return foods.add(food);
+        return accept(food) && foods.add(food);
     }
 
     @Override
