@@ -14,8 +14,8 @@ public class Warehouse implements Storage {
     }
 
     @Override
-    public void add(Food food) {
-        foods.add(food);
+    public boolean add(Food food) {
+        return foods.add(food);
     }
 
     @Override

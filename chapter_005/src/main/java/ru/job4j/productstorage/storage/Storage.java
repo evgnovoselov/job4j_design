@@ -21,8 +21,9 @@ public interface Storage {
      * Добавляет продукт в хранилище.
      *
      * @param food Продукт.
+     * @return Получилось ли добавить продукт в хранилище.
      */
-    void add(Food food);
+    boolean add(Food food);
 
     /**
      * Удаляет продукт из хранилища.

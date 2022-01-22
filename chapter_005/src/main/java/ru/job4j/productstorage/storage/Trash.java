@@ -14,7 +14,8 @@ public class Trash implements Storage {
     }
 
     @Override
-    public void add(Food food) {
+    public boolean add(Food food) {
+        return true;
     }
 
     @Override
