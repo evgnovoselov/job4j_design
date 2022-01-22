@@ -33,23 +33,23 @@ public class ControlQualityTest {
         warehouse.add(foods.get(4));
         shop.add(foods.get(5));
         List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Сникерс : 100 : 0%");
-        List<String> actual = getFormattedFoods(warehouse, date);
+        List<String> actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
         expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Яблоки : 76 : 0%");
-        actual = getFormattedFoods(shop, date);
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         List<DistributionOperation> operations = List.of(
-                new DistributeStorage(warehouse, food -> food.getExpiryPercentOfDate(date) <= 25),
-                new DistributeStorage(shop, food -> food.getExpiryPercentOfDate(date) > 25
-                        && food.getExpiryPercentOfDate(date) <= 75)
+                new DistributeStorage(warehouse, food -> warehouse.getExpiryPercentBy(food) <= 25),
+                new DistributeStorage(shop, food -> warehouse.getExpiryPercentBy(food) > 25
+                        && shop.getExpiryPercentBy(food) <= 75)
         );
         ControlQuality controlQuality = new ControlQuality(operations);
         controlQuality.distributeFoodsIn(List.of(warehouse, shop));
         expected = List.of("Конфеты : 100 : 0%", "Сникерс : 100 : 0%", "Чипсы Принглс : 14 : 0%");
-        actual = getFormattedFoods(warehouse, date);
+        actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
         expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
-        actual = getFormattedFoods(shop, date);
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
     }
 
@@ -69,30 +69,30 @@ public class ControlQualityTest {
         shop.add(foods.get(4));
         shop.add(foods.get(5));
         List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
-        List<String> actual = getFormattedFoods(warehouse, date);
+        List<String> actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
         expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 0%");
-        actual = getFormattedFoods(shop, date);
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
-        actual = getFormattedFoods(trash, date);
+        actual = getFormattedFoods(trash);
         assertEquals(expected, actual);
         List<DistributionOperation> operations = List.of(
-                new DistributeStorage(warehouse, food -> food.getExpiryPercentOfDate(date) <= 25),
-                new DistributeStorage(shop, food -> food.getExpiryPercentOfDate(date) > 25
-                        && food.getExpiryPercentOfDate(date) <= 75),
-                new DistributeStorage(trash, food -> food.getExpiryPercentOfDate(date) >= 100)
+                new DistributeStorage(warehouse, food -> warehouse.getExpiryPercentBy(food) <= 25),
+                new DistributeStorage(shop, food -> shop.getExpiryPercentBy(food) > 25
+                        && shop.getExpiryPercentBy(food) <= 75),
+                new DistributeStorage(trash, food -> trash.getExpiryPercentBy(food) >= 100)
         );
         ControlQuality controlQuality = new ControlQuality(operations);
         controlQuality.distributeFoodsIn(List.of(warehouse, shop));
         expected = List.of("Чипсы Принглс : 14 : 0%");
-        actual = getFormattedFoods(warehouse, date);
+        actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
         expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
-        actual = getFormattedFoods(shop, date);
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
-        actual = getFormattedFoods(trash, date);
+        actual = getFormattedFoods(trash);
         assertEquals(expected, actual);
     }
 
@@ -113,36 +113,36 @@ public class ControlQualityTest {
         shop.add(foods.get(4));
         warehouse.add(foods.get(5));
         List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Яблоки : 76 : 0%");
-        List<String> actual = getFormattedFoods(warehouse, date);
+        List<String> actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
         expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%");
-        actual = getFormattedFoods(shop, date);
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
-        actual = getFormattedFoods(trash, date);
+        actual = getFormattedFoods(trash);
         assertEquals(expected, actual);
         List<DistributionOperation> operations = List.of(
-                new DistributeStorageChangeDiscount(shop, food -> food.getExpiryPercentOfDate(date) > 75
-                        && food.getExpiryPercentOfDate(date) < 100, 5)
+                new DistributeStorageChangeDiscount(shop, food -> shop.getExpiryPercentBy(food) > 75
+                        && shop.getExpiryPercentBy(food) < 100, 5)
         );
         ControlQuality controlQuality = new ControlQuality(operations);
         controlQuality.distributeFoodsIn(List.of(warehouse, shop));
         expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
-        actual = getFormattedFoods(warehouse, date);
+        actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
         expected = List.of("Форель : 83 : 5%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 5%");
-        actual = getFormattedFoods(shop, date);
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
-        actual = getFormattedFoods(trash, date);
+        actual = getFormattedFoods(trash);
         assertEquals(expected, actual);
     }
 
-    private List<String> getFormattedFoods(Storage storage, LocalDate date) {
+    private List<String> getFormattedFoods(Storage storage) {
         return storage.getFoods().stream()
                 .map(food -> String.format("%s : %s : %s%%",
                         food.getName(),
-                        food.getExpiryPercentOfDate(date),
+                        storage.getExpiryPercentBy(food),
                         food.getDiscount()))
                 .collect(Collectors.toList());
     }
