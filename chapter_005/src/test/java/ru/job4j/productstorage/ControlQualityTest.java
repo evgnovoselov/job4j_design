@@ -23,7 +23,6 @@ public class ControlQualityTest {
      */
     @Test
     public void whenDistributeFoodsFromStoragesThenStoragesHaveFoods() {
-        LocalDate date = LocalDate.now().plusDays(10);
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
@@ -59,7 +58,6 @@ public class ControlQualityTest {
      */
     @Test
     public void whenStoragesHaveTrashThenDeletedFoods() {
-        LocalDate date = LocalDate.now().plusDays(10);
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
@@ -104,7 +102,6 @@ public class ControlQualityTest {
      */
     @Test
     public void whenHaveFoodsNeedDiscount() {
-        LocalDate date = LocalDate.now().plusDays(10);
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
@@ -153,28 +150,28 @@ public class ControlQualityTest {
     private static List<? extends Food> generateProducts() {
         return new ArrayList<>(List.of(
                 new Seafood("Креветки",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(30),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(20),
                         100),
                 new Seafood("Форель",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(12),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(2),
                         100),
                 new Chips("Чипсы Принглс",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(70),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(60),
                         100),
                 new Chocolate("Конфеты",
+                        LocalDate.now().minusDays(10),
                         LocalDate.now(),
-                        LocalDate.now().plusDays(10),
                         100),
                 new Chocolate("Сникерс",
+                        LocalDate.now().minusDays(10),
                         LocalDate.now(),
-                        LocalDate.now().plusDays(10),
                         100),
                 new Fruit("Яблоки",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(13),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(3),
                         100)));
     }
 }
