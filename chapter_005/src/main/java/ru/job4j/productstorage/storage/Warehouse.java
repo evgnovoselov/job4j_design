@@ -6,11 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Warehouse implements Storage {
-    List<Food> foods = new ArrayList<>();
+    private final List<Food> foods = new ArrayList<>();
 
     @Override
-    public void add(Food food) {
-        foods.add(food);
+    public boolean accept(Food food) {
+        return getExpiryPercentBy(food) < 25;
+    }
+
+    @Override
+    public boolean add(Food food) {
+        return accept(food) && foods.add(food);
     }
 
     @Override
