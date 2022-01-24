@@ -34,6 +34,6 @@ public class Shop implements Storage {
 
     @Override
     public List<Food> getFoods() {
-        return foods;
+        return new ArrayList<>(foods);
     }
 }
