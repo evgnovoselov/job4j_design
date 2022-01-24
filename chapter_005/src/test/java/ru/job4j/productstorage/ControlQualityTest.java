@@ -13,8 +13,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class ControlQualityTest {
+    /**
+     * Проверка, что при получении списка продуктов в магазине, в список напрямую нельзя добавить продукт.
+     */
+    @Test
+    public void whenGetFoodsAndAddFoodThenNotHaveFood() {
+        List<? extends Food> foods = generateProducts();
+        List<Storage> storages = List.of(new Warehouse(), new Shop());
+        for (Storage storage : storages) {
+            foods.forEach(storage::add);
+            List<Food> unexpected = storage.getFoods();
+            List<Food> actual = storage.getFoods();
+            actual.add(new Fruit("Яблоки 2",
+                    LocalDate.now().minusDays(10),
+                    LocalDate.now().plusDays(3),
+                    100));
+            assertNotEquals(unexpected.stream().map(this::foodFormatter).collect(Collectors.joining()),
+                    actual.stream().map(this::foodFormatter).collect(Collectors.joining()));
+        }
+    }
+
     /**
      * Тестирование функционала перераспределения еды в хранилищах warehouse и shop.
      */
