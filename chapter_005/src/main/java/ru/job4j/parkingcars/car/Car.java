@@ -10,4 +10,11 @@ public interface Car {
      * @return размер машины.
      */
     int getSize();
+
+    /**
+     * Возвращение копии машины.
+     *
+     * @return Копия машины.
+     */
+    Car getCopy();
 }

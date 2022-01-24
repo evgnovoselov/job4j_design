@@ -42,7 +42,7 @@ public class FirstParking implements Parking {
 
     @Override
     public List<Car> getCars(Predicate<Car> predicate) {
-        return cars.stream().filter(predicate).collect(Collectors.toList());
+        return cars.stream().filter(predicate).map(Car::getCopy).collect(Collectors.toList());
     }
 
     @Override
