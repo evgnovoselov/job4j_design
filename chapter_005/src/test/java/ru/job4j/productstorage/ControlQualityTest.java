@@ -1,9 +1,6 @@
 package ru.job4j.productstorage;
 
 import org.junit.Test;
-import ru.job4j.productstorage.distributionoperation.DistributeStorage;
-import ru.job4j.productstorage.distributionoperation.DistributeStorageChangeDiscount;
-import ru.job4j.productstorage.distributionoperation.DistributionOperation;
 import ru.job4j.productstorage.food.*;
 import ru.job4j.productstorage.storage.Shop;
 import ru.job4j.productstorage.storage.Storage;
@@ -15,42 +12,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class ControlQualityTest {
+    /**
+     * Проверка, что при получении списка продуктов в магазине, в список напрямую нельзя добавить продукт.
+     */
+    @Test
+    public void whenGetFoodsAndAddFoodThenNotHaveFood() {
+        List<? extends Food> foods = generateProducts();
+        List<Storage> storages = List.of(new Warehouse(), new Shop());
+        for (Storage storage : storages) {
+            foods.forEach(storage::add);
+            List<Food> unexpected = storage.getFoods();
+            List<Food> actual = storage.getFoods();
+            actual.add(new Fruit("Яблоки 2",
+                    LocalDate.now().minusDays(10),
+                    LocalDate.now().plusDays(3),
+                    100));
+            assertNotEquals(unexpected.stream().map(this::foodFormatter).collect(Collectors.joining()),
+                    actual.stream().map(this::foodFormatter).collect(Collectors.joining()));
+        }
+    }
+
     /**
      * Тестирование функционала перераспределения еды в хранилищах warehouse и shop.
      */
     @Test
     public void whenDistributeFoodsFromStoragesThenStoragesHaveFoods() {
-        LocalDate date = LocalDate.now().plusDays(10);
-        List<? extends Food> foods = generateProducts();
+        List<String> expected;
+        List<String> actual;
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
-        warehouse.add(foods.get(0));
-        shop.add(foods.get(1));
-        shop.add(foods.get(2));
-        warehouse.add(foods.get(3));
-        warehouse.add(foods.get(4));
-        shop.add(foods.get(5));
-        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Сникерс : 100 : 0%");
-        List<String> actual = getFormattedFoods(warehouse, date);
+        List<? extends Food> foods = generateProducts();
+        List<Storage> storages = List.of(warehouse, shop);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
+        expected = List.of("Чипсы Принглс : 14 : 0%");
+        actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Яблоки : 76 : 0%");
-        actual = getFormattedFoods(shop, date);
-        assertEquals(expected, actual);
-        List<DistributionOperation> operations = List.of(
-                new DistributeStorage(warehouse, food -> food.getExpiryPercentOfDate(date) <= 25),
-                new DistributeStorage(shop, food -> food.getExpiryPercentOfDate(date) > 25
-                        && food.getExpiryPercentOfDate(date) <= 75)
-        );
-        ControlQuality controlQuality = new ControlQuality(operations);
-        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
-        expected = List.of("Конфеты : 100 : 0%", "Сникерс : 100 : 0%", "Чипсы Принглс : 14 : 0%");
-        actual = getFormattedFoods(warehouse, date);
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
-        actual = getFormattedFoods(shop, date);
+        expected = List.of("Креветки : 33 : 0%", "Форель : 83 : 10%", "Яблоки : 76 : 10%");
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
     }
 
@@ -59,42 +62,23 @@ public class ControlQualityTest {
      */
     @Test
     public void whenStoragesHaveTrashThenDeletedFoods() {
-        LocalDate date = LocalDate.now().plusDays(10);
+        List<String> expected;
+        List<String> actual;
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
         Storage trash = new Trash();
-        warehouse.add(foods.get(0));
-        shop.add(foods.get(1));
-        shop.add(foods.get(2));
-        warehouse.add(foods.get(3));
-        shop.add(foods.get(4));
-        shop.add(foods.get(5));
-        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
-        List<String> actual = getFormattedFoods(warehouse, date);
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 0%");
-        actual = getFormattedFoods(shop, date);
-        assertEquals(expected, actual);
-        expected = List.of();
-        actual = getFormattedFoods(trash, date);
-        assertEquals(expected, actual);
-        List<DistributionOperation> operations = List.of(
-                new DistributeStorage(warehouse, food -> food.getExpiryPercentOfDate(date) <= 25),
-                new DistributeStorage(shop, food -> food.getExpiryPercentOfDate(date) > 25
-                        && food.getExpiryPercentOfDate(date) <= 75),
-                new DistributeStorage(trash, food -> food.getExpiryPercentOfDate(date) >= 100)
-        );
-        ControlQuality controlQuality = new ControlQuality(operations);
-        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
+        List<Storage> storages = List.of(warehouse, shop, trash);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
         expected = List.of("Чипсы Принглс : 14 : 0%");
-        actual = getFormattedFoods(warehouse, date);
+        actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Яблоки : 76 : 0%", "Креветки : 33 : 0%");
-        actual = getFormattedFoods(shop, date);
+        expected = List.of("Креветки : 33 : 0%", "Форель : 83 : 10%", "Яблоки : 76 : 10%");
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
-        actual = getFormattedFoods(trash, date);
+        actual = getFormattedFoods(trash);
         assertEquals(expected, actual);
     }
 
@@ -104,77 +88,69 @@ public class ControlQualityTest {
      */
     @Test
     public void whenHaveFoodsNeedDiscount() {
-        LocalDate date = LocalDate.now().plusDays(10);
+        List<String> expected;
+        List<String> actual;
         List<? extends Food> foods = generateProducts();
         Storage warehouse = new Warehouse();
         Storage shop = new Shop();
         Storage trash = new Trash();
-        warehouse.add(foods.get(0));
-        shop.add(foods.get(1));
-        shop.add(foods.get(2));
-        warehouse.add(foods.get(3));
-        shop.add(foods.get(4));
-        warehouse.add(foods.get(5));
-        List<String> expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%", "Яблоки : 76 : 0%");
-        List<String> actual = getFormattedFoods(warehouse, date);
+        List<Storage> storages = List.of(warehouse, shop, trash);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
+        expected = List.of("Чипсы Принглс : 14 : 0%");
+        actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 0%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%");
-        actual = getFormattedFoods(shop, date);
+        expected = List.of("Креветки : 33 : 0%", "Форель : 83 : 10%", "Яблоки : 76 : 10%");
+        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
-        actual = getFormattedFoods(trash, date);
-        assertEquals(expected, actual);
-        List<DistributionOperation> operations = List.of(
-                new DistributeStorageChangeDiscount(shop, food -> food.getExpiryPercentOfDate(date) > 75
-                        && food.getExpiryPercentOfDate(date) < 100, 5)
-        );
-        ControlQuality controlQuality = new ControlQuality(operations);
-        controlQuality.distributeFoodsIn(List.of(warehouse, shop));
-        expected = List.of("Креветки : 33 : 0%", "Конфеты : 100 : 0%");
-        actual = getFormattedFoods(warehouse, date);
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 83 : 5%", "Чипсы Принглс : 14 : 0%", "Сникерс : 100 : 0%", "Яблоки : 76 : 5%");
-        actual = getFormattedFoods(shop, date);
-        assertEquals(expected, actual);
-        expected = List.of();
-        actual = getFormattedFoods(trash, date);
+        actual = getFormattedFoods(trash);
         assertEquals(expected, actual);
     }
 
-    private List<String> getFormattedFoods(Storage storage, LocalDate date) {
+    private List<String> getFormattedFoods(Storage storage) {
         return storage.getFoods().stream()
                 .map(food -> String.format("%s : %s : %s%%",
                         food.getName(),
-                        food.getExpiryPercentOfDate(date),
+                        storage.getExpiryPercentBy(food),
                         food.getDiscount()))
                 .collect(Collectors.toList());
+    }
+
+    private String foodFormatter(Food food) {
+        return String.format("Food: %s, %s, %s, %s, %s",
+                food.getName(),
+                food.getCreateDate(),
+                food.getExpiryDate(),
+                food.getPrice(),
+                food.getDiscount());
     }
 
     private static List<? extends Food> generateProducts() {
         return new ArrayList<>(List.of(
                 new Seafood("Креветки",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(30),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(20),
                         100),
                 new Seafood("Форель",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(12),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(2),
                         100),
                 new Chips("Чипсы Принглс",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(70),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(60),
                         100),
                 new Chocolate("Конфеты",
+                        LocalDate.now().minusDays(10),
                         LocalDate.now(),
-                        LocalDate.now().plusDays(10),
                         100),
                 new Chocolate("Сникерс",
+                        LocalDate.now().minusDays(10),
                         LocalDate.now(),
-                        LocalDate.now().plusDays(10),
                         100),
                 new Fruit("Яблоки",
-                        LocalDate.now(),
-                        LocalDate.now().plusDays(13),
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(3),
                         100)));
     }
 }

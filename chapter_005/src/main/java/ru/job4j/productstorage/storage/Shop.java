@@ -6,11 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Shop implements Storage {
-    List<Food> foods = new ArrayList<>();
+    private final List<Food> foods = new ArrayList<>();
 
     @Override
-    public void add(Food food) {
-        foods.add(food);
+    public boolean accept(Food food) {
+        boolean result = false;
+        int foodExpiryPercent = getExpiryPercentBy(food);
+        if (foodExpiryPercent >= 75 && foodExpiryPercent < 100) {
+            food.setDiscount(10);
+            result = true;
+        }
+        if (!result && foodExpiryPercent >= 25 && foodExpiryPercent < 75) {
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean add(Food food) {
+        return accept(food) && foods.add(food);
     }
 
     @Override
@@ -20,6 +34,6 @@ public class Shop implements Storage {
 
     @Override
     public List<Food> getFoods() {
-        return foods;
+        return new ArrayList<>(foods);
     }
 }

@@ -1,6 +1,6 @@
 package ru.job4j.productstorage;
 
-import ru.job4j.productstorage.distributionoperation.DistributionOperation;
+import ru.job4j.productstorage.food.Food;
 import ru.job4j.productstorage.storage.Storage;
 
 import java.util.List;
@@ -9,21 +9,21 @@ import java.util.List;
  * Контроллер правил распределения продуктов.
  */
 public class ControlQuality {
-    private List<DistributionOperation> operations;
+    private List<Storage> storages;
 
-    public ControlQuality(List<DistributionOperation> operations) {
-        this.operations = operations;
+    public ControlQuality(List<Storage> storages) {
+        this.storages = storages;
     }
 
     /**
-     * Распределение продуктов по хранилищам.
+     * Распределение продукта по хранилищам.
      *
-     * @param storages Список хранилещей для распределения продуктов.
+     * @param food Продукт для определения в хранилище.
      */
-    public void distributeFoodsIn(List<Storage> storages) {
+    public void distributeFood(Food food) {
         for (Storage storage : storages) {
-            for (DistributionOperation operation : operations) {
-                operation.toDistribute(storage);
+            if (storage.add(food)) {
+                break;
             }
         }
     }
