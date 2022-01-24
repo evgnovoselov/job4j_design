@@ -4,6 +4,7 @@ import ru.job4j.productstorage.food.Food;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Shop implements Storage {
     private final List<Food> foods = new ArrayList<>();
@@ -34,6 +35,12 @@ public class Shop implements Storage {
 
     @Override
     public List<Food> getFoods() {
-        return foods;
+        return foods.stream()
+                .map(food -> new Food(food.getName(),
+                        food.getCreateDate(),
+                        food.getExpiryDate(),
+                        food.getPrice(),
+                        food.getDiscount()))
+                .collect(Collectors.toList());
     }
 }
