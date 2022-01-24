@@ -96,6 +96,15 @@ public class ControlQualityTest {
                 .collect(Collectors.toList());
     }
 
+    private String foodFormatter(Food food) {
+        return String.format("Food: %s, %s, %s, %s, %s",
+                food.getName(),
+                food.getCreateDate(),
+                food.getExpiryDate(),
+                food.getPrice(),
+                food.getDiscount());
+    }
+
     private static List<? extends Food> generateProducts() {
         return new ArrayList<>(List.of(
                 new Seafood("Креветки",
