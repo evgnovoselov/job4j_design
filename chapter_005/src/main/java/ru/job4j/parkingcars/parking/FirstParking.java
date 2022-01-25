@@ -1,6 +1,7 @@
 package ru.job4j.parkingcars.parking;
 
 import ru.job4j.parkingcars.car.Car;
+import ru.job4j.parkingcars.car.PassengerCar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class FirstParking implements Parking {
     @Override
     public boolean isThereSpaceForCar(Car car) {
         boolean result = false;
-        if (car.getSize() > 1 && truckFreeSpaces > 0) {
+        if (car.getSize() != PassengerCar.SIZE && truckFreeSpaces > 0) {
             result = true;
         } else if (passengerCarFreeSpaces >= car.getSize()) {
             result = true;
@@ -59,7 +60,7 @@ public class FirstParking implements Parking {
     @Override
     public boolean addCar(Car car) {
         boolean result = false;
-        if (car.getSize() > 1 && truckFreeSpaces >= 1) {
+        if (car.getSize() != PassengerCar.SIZE && truckFreeSpaces >= 1) {
             truckFreeSpaces -= 1;
             cars.add(car);
             result = true;
