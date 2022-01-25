@@ -5,10 +5,11 @@ import java.util.Objects;
 public class PassengerCar implements Car {
     private static int count = 1;
     private int id = count++;
+    public static final int SIZE = 1;
 
     @Override
     public int getSize() {
-        return 1;
+        return SIZE;
     }
 
     @Override
