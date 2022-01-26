@@ -1,13 +1,17 @@
 package ru.job4j.menu;
 
-public class Menu {
-    private MenuSection menuSection;
+import java.util.List;
 
-    public Menu(MenuSection menuSection) {
-        this.menuSection = menuSection;
+public class Menu {
+    private List<MenuSection> menuSections;
+
+    public boolean addMenuSection(MenuSection section) {
+        return menuSections.add(section);
     }
 
+    /**
+     * TODO method.
+     */
     void printMenu() {
-        // TODO
     }
 }
