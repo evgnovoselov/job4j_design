@@ -21,5 +21,13 @@ public class MenuTest {
         menu.addMenuSection(section1);
         menu.addMenuSection(section6);
         System.out.println(menu);
+        String expected = "Menu:" + System.lineSeparator()
+                + "Задача 1." + System.lineSeparator()
+                + "---- Задача 1.1." + System.lineSeparator()
+                + "-------- Задача 1.1.1." + System.lineSeparator()
+                + "-------- Задача 1.1.2." + System.lineSeparator()
+                + "---- Задача 1.2." + System.lineSeparator()
+                + "Задача 2." + System.lineSeparator();
+        assertEquals(expected, menu.toString());
     }
 }
