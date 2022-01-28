@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Menu {
-    private final List<MenuSection> menuSections = new ArrayList<>();
+    private final List<MenuElement> menuElements = new ArrayList<>();
 
-    public boolean addMenuSection(MenuSection section) {
-        return menuSections.add(section);
+    public boolean add(MenuElement element) {
+        return menuElements.add(element);
     }
 
     @Override
     public String toString() {
         return String.format("Menu:%n%s",
-                menuSections.stream()
-                        .map(section -> String.format("%s", section))
+                menuElements.stream()
+                        .map(element -> String.format("%s", element))
                         .collect(Collectors.joining()));
     }
 }

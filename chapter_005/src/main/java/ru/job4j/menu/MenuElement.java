@@ -1,19 +1,18 @@
 package ru.job4j.menu;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Todo add consumer.
  */
-public class MenuSection {
+public class MenuElement {
     private int deep = 0;
     private String name;
-    private final List<MenuSection> subSections = new ArrayList<>();
+    private final List<MenuElement> subElements = new ArrayList<>();
 
-    public MenuSection(String name) {
+    public MenuElement(String name) {
         this.name = name;
     }
 
@@ -25,9 +24,9 @@ public class MenuSection {
         this.name = name;
     }
 
-    public boolean addSubSection(MenuSection section) {
+    public boolean add(MenuElement section) {
         section.deep = this.deep + 1;
-        return subSections.add(section);
+        return subElements.add(section);
     }
 
     @Override
@@ -35,7 +34,7 @@ public class MenuSection {
         return String.format("%s%s%n%s",
                 deep < 1 ? "" : "----".repeat(deep) + " ",
                 name,
-                subSections.stream()
+                subElements.stream()
                         .map(section -> String.format("%s", section))
                         .collect(Collectors.joining()));
     }

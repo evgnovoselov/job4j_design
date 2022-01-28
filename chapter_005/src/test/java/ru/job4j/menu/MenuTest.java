@@ -8,18 +8,18 @@ public class MenuTest {
     @Test
     public void whenAddSectionsInMenuAndPrintThenShowMenu() {
         Menu menu = new Menu();
-        MenuSection section1 = new MenuSection("Задача 1.");
-        MenuSection section2 = new MenuSection("Задача 1.1.");
-        MenuSection section3 = new MenuSection("Задача 1.1.1.");
-        MenuSection section4 = new MenuSection("Задача 1.1.2.");
-        MenuSection section5 = new MenuSection("Задача 1.2.");
-        MenuSection section6 = new MenuSection("Задача 2.");
-        section1.addSubSection(section2);
-        section2.addSubSection(section3);
-        section2.addSubSection(section4);
-        section1.addSubSection(section5);
-        menu.addMenuSection(section1);
-        menu.addMenuSection(section6);
+        MenuElement element1 = new MenuElement("Задача 1.");
+        MenuElement element2 = new MenuElement("Задача 1.1.");
+        MenuElement element3 = new MenuElement("Задача 1.1.1.");
+        MenuElement element4 = new MenuElement("Задача 1.1.2.");
+        MenuElement element5 = new MenuElement("Задача 1.2.");
+        MenuElement element6 = new MenuElement("Задача 2.");
+        element1.add(element2);
+        element2.add(element3);
+        element2.add(element4);
+        element1.add(element5);
+        menu.add(element1);
+        menu.add(element6);
         String expected = "Menu:" + System.lineSeparator()
                 + "Задача 1." + System.lineSeparator()
                 + "---- Задача 1.1." + System.lineSeparator()
