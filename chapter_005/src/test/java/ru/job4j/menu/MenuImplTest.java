@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MenuTest {
+public class MenuImplTest {
     @Test
     public void whenAddSectionsInMenuAndPrintThenShowMenu() {
-        Menu menu = new Menu();
+        MenuImpl menu = new MenuImpl();
         MenuElement element1 = new MenuElement("Задача 1.");
         MenuElement element2 = new MenuElement("Задача 1.1.");
         MenuElement element3 = new MenuElement("Задача 1.1.1.");
