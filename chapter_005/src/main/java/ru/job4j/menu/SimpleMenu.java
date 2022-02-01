@@ -26,7 +26,20 @@ public class SimpleMenu implements Menu {
 
     @Override
     public Iterator<MenuItemInfo> iterator() {
-        return null;
+        return new Iterator<MenuItemInfo>() {
+            private final DFSIterator dfsIterator = new DFSIterator();
+
+            @Override
+            public boolean hasNext() {
+                return dfsIterator.hasNext();
+            }
+
+            @Override
+            public MenuItemInfo next() {
+                ItemInfo next = dfsIterator.next();
+                return new MenuItemInfo(next.menuItem, next.number);
+            }
+        };
     }
 
     private Optional<ItemInfo> findItem(String name) {
