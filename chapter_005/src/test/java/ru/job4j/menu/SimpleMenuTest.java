@@ -46,4 +46,16 @@ public class SimpleMenuTest {
         );
         menu.forEach(menuItemInfo -> System.out.println(menuItemInfo.getNumber() + menuItemInfo.getName()));
     }
+
+    @Test
+    public void whenAddAndPrintThenPrintSame() {
+        MenuPrinter printer = new LineMenuPrinter();
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);
+        menu.add(Menu.ROOT, "Покормить собаку", STUB_ACTION);
+        menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION);
+        menu.add("Купить продукты", "Купить хлеб", STUB_ACTION);
+        menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
+        printer.print(menu);
+    }
 }
