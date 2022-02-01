@@ -21,7 +21,14 @@ public class SimpleMenu implements Menu {
     }
 
     private Optional<ItemInfo> findItem(String name) {
-        return null;
+        ItemInfo foundItem = null;
+        for (DFSIterator it = new DFSIterator(); it.hasNext(); ) {
+            ItemInfo itemInfo = it.next();
+            if (itemInfo.menuItem.getName().equals(name)) {
+                foundItem = itemInfo;
+            }
+        }
+        return Optional.ofNullable(foundItem);
     }
 
     /**
