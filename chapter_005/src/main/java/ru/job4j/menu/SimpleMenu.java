@@ -24,6 +24,9 @@ public class SimpleMenu implements Menu {
         return null;
     }
 
+    /**
+     * Реализация элементов меню.
+     */
     private static class SimpleMenuItem implements MenuItem {
         private String name;
         private List<MenuItem> children = new ArrayList<>();
@@ -50,6 +53,9 @@ public class SimpleMenu implements Menu {
         }
     }
 
+    /**
+     * Итератор для прохождения по пунктам меню.
+     */
     private class DFSIterator implements Iterator<ItemInfo> {
         Deque<MenuItem> stack = new LinkedList<>();
         Deque<String> numbers = new LinkedList<>();
@@ -84,6 +90,9 @@ public class SimpleMenu implements Menu {
         }
     }
 
+    /**
+     * Класс для компановки пункта меню и номер пункта.
+     */
     private static class ItemInfo {
         MenuItem menuItem;
         String number;
