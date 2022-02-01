@@ -44,7 +44,8 @@ public class SimpleMenu implements Menu {
 
     private Optional<ItemInfo> findItem(String name) {
         ItemInfo foundItem = null;
-        for (DFSIterator it = new DFSIterator(); it.hasNext(); ) {
+        var it = new DFSIterator();
+        while (it.hasNext()) {
             ItemInfo itemInfo = it.next();
             if (itemInfo.menuItem.getName().equals(name)) {
                 foundItem = itemInfo;
@@ -111,8 +112,9 @@ public class SimpleMenu implements Menu {
             String lastNumber = numbers.removeFirst();
             List<MenuItem> children = current.getChildren();
             int currentNumber = children.size();
-            for (var i = children.listIterator(children.size()); i.hasPrevious(); ) {
-                stack.addFirst(i.previous());
+            var iterator = children.listIterator(children.size());
+            while (iterator.hasPrevious()) {
+                stack.addFirst(iterator.previous());
                 numbers.addFirst(lastNumber.concat(String.valueOf(currentNumber--).concat(".")));
             }
             return new ItemInfo(current, lastNumber);
