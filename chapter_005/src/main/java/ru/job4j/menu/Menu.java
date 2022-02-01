@@ -12,7 +12,7 @@ public interface Menu extends Iterable<Menu.MenuItemInfo> {
 
     Optional<MenuItemInfo> select(String itemName);
 
-    public class MenuItemInfo {
+    class MenuItemInfo {
         private final String name;
         private final List<String> children;
         private final ActionDelegate actionDelegate;
