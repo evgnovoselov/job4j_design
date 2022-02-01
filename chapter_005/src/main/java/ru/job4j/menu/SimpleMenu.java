@@ -7,16 +7,18 @@ public class SimpleMenu implements Menu {
 
     @Override
     public boolean add(String parentName, String childName, ActionDelegate actionDelegate) {
+        boolean result = false;
         boolean root = Objects.equals(parentName, ROOT);
         if (root) {
-            rootElements.add(new SimpleMenuItem(childName, actionDelegate));
+            result = rootElements.add(new SimpleMenuItem(childName, actionDelegate));
         }
         if (!root) {
-            ItemInfo parentItemInfo = findItem(parentName)
-                    .orElseThrow(() -> new IllegalArgumentException("Нет заданного родительского элемента."));
-            parentItemInfo.menuItem.getChildren().add(new SimpleMenuItem(childName, actionDelegate));
+            Optional<ItemInfo> parentItemInfo = findItem(parentName);
+            if (parentItemInfo.isPresent()) {
+                result = parentItemInfo.get().menuItem.getChildren().add(new SimpleMenuItem(childName, actionDelegate));
+            }
         }
-        return true;
+        return result;
     }
 
     @Override
