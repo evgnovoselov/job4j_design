@@ -1,21 +1,96 @@
 package ru.job4j.menu;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
-public class SimpleMenu {
-    private final List<MenuElement> menuElements = new ArrayList<>();
+public class SimpleMenu implements Menu {
+    private final List<MenuItem> rootElements = new ArrayList<>();
 
-    public boolean add(MenuElement element) {
-        return menuElements.add(element);
+    @Override
+    public boolean add(String parentName, String childName, ActionDelegate actionDelegate) {
+        return false;
     }
 
     @Override
-    public String toString() {
-        return String.format("Menu:%n%s",
-                menuElements.stream()
-                        .map(element -> String.format("%s", element))
-                        .collect(Collectors.joining()));
+    public Optional<MenuItemInfo> select(String itemName) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Iterator<MenuItemInfo> iterator() {
+        return null;
+    }
+
+    private Optional<ItemInfo> findItem(String name) {
+        return null;
+    }
+
+    private static class SimpleMenuItem implements MenuItem {
+        private String name;
+        private List<MenuItem> children = new ArrayList<>();
+        private ActionDelegate actionDelegate;
+
+        public SimpleMenuItem(String name, ActionDelegate actionDelegate) {
+            this.name = name;
+            this.actionDelegate = actionDelegate;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public List<MenuItem> getChildren() {
+            return children;
+        }
+
+        @Override
+        public ActionDelegate getActionDelegate() {
+            return actionDelegate;
+        }
+    }
+
+    private class DFSIterator implements Iterator<ItemInfo> {
+        Deque<MenuItem> stack = new LinkedList<>();
+        Deque<String> numbers = new LinkedList<>();
+
+        public DFSIterator() {
+            int number = 1;
+            for (MenuItem item : rootElements) {
+                stack.addLast(item);
+                numbers.addLast(String.valueOf(number++).concat("."));
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public ItemInfo next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            MenuItem current = stack.removeFirst();
+            String lastNumber = numbers.removeFirst();
+            List<MenuItem> children = current.getChildren();
+            int currentNumber = children.size();
+            for (var i = children.listIterator(children.size()); i.hasPrevious(); ) {
+                stack.addFirst(i.previous());
+                numbers.addFirst(lastNumber.concat(String.valueOf(currentNumber--).concat(".")));
+            }
+            return new ItemInfo(current, lastNumber);
+        }
+    }
+
+    private static class ItemInfo {
+        MenuItem menuItem;
+        String number;
+
+        public ItemInfo(MenuItem menuItem, String number) {
+            this.menuItem = menuItem;
+            this.number = number;
+        }
     }
 }
