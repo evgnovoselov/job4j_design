@@ -26,7 +26,7 @@ public class SimpleMenu implements Menu {
 
     @Override
     public Iterator<MenuItemInfo> iterator() {
-        return new Iterator<MenuItemInfo>() {
+        return new Iterator<>() {
             private final DFSIterator dfsIterator = new DFSIterator();
 
             @Override
