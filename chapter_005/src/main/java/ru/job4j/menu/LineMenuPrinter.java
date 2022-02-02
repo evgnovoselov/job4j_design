@@ -7,7 +7,12 @@ public class LineMenuPrinter implements MenuPrinter {
     @Override
     public void print(Menu menu) {
         menu.forEach(menuItemInfo -> {
-            System.out.printf("%s %s%n", menuItemInfo.getNumber(), menuItemInfo.getName());
+            int deepItem = menuItemInfo.getNumber().split("\\.").length - 1;
+            System.out.printf(
+                    "%s%s%n",
+                    deepItem > 0 ? String.format("%s ", "----".repeat(deepItem)) : "",
+                    menuItemInfo.getName()
+            );
         });
     }
 }
