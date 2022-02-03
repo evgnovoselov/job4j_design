@@ -12,6 +12,9 @@ import static org.junit.Assert.assertEquals;
 public class SimpleMenuTest {
     public static final ActionDelegate STUB_ACTION = System.out::println;
 
+    /**
+     * Тестирование выбора пунктов меню.
+     */
     @Test
     public void whenAddThenReturnSame() {
         Menu menu = new SimpleMenu();
@@ -49,6 +52,9 @@ public class SimpleMenuTest {
         );
     }
 
+    /**
+     * Проверка печати меню с номерами.
+     */
     @Test
     public void whenAddItemAndPrintWithNumberThenRightNumbers() {
         ByteArrayOutputStream mem = new ByteArrayOutputStream();
@@ -70,6 +76,9 @@ public class SimpleMenuTest {
         System.setOut(oldOut);
     }
 
+    /**
+     * Тест верного печатания меню с линиями.
+     */
     @Test
     public void whenAddAndPrintThenPrintSame() {
         ByteArrayOutputStream mem = new ByteArrayOutputStream();
