@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -89,5 +90,17 @@ public class SimpleMenuTest {
                 + "Покормить собаку" + System.lineSeparator();
         assertEquals(expected, mem.toString());
         System.setOut(oldOut);
+    }
+
+    /**
+     * Если выбирается несуществующий раздел.
+     */
+    @Test
+    public void whenSelectNotHaveElementThenOptionalNull() {
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);
+        menu.add(Menu.ROOT, "Покормить собаку", STUB_ACTION);
+        menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION);
+        assertEquals(Optional.empty(), menu.select("Этого раздела нет"));
     }
 }
