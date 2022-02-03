@@ -38,6 +38,9 @@ public class SimpleMenu implements Menu {
 
             @Override
             public MenuItemInfo next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
                 ItemInfo next = dfsIterator.next();
                 return new MenuItemInfo(next.menuItem, next.number);
             }
