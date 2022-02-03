@@ -60,11 +60,11 @@ public class SimpleMenuTest {
         menu.add("Купить продукты", "Купить хлеб", STUB_ACTION);
         menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
         menu.forEach(menuItemInfo -> System.out.println(menuItemInfo.getNumber() + menuItemInfo.getName()));
-        String expected = "1.Сходить в магазин" + System.lineSeparator() +
-                "1.1.Купить продукты" + System.lineSeparator() +
-                "1.1.1.Купить хлеб" + System.lineSeparator() +
-                "1.1.2.Купить молоко" + System.lineSeparator() +
-                "2.Покормить собаку" + System.lineSeparator();
+        String expected = "1.Сходить в магазин" + System.lineSeparator()
+                + "1.1.Купить продукты" + System.lineSeparator()
+                + "1.1.1.Купить хлеб" + System.lineSeparator()
+                + "1.1.2.Купить молоко" + System.lineSeparator()
+                + "2.Покормить собаку" + System.lineSeparator();
         assertEquals(expected, mem.toString());
         System.setOut(oldOut);
     }
@@ -82,11 +82,11 @@ public class SimpleMenuTest {
         menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
         MenuPrinter printer = new LineMenuConsolePrinter();
         printer.print(menu);
-        String expected = "Сходить в магазин" + System.lineSeparator() +
-                "---- Купить продукты" + System.lineSeparator() +
-                "-------- Купить хлеб" + System.lineSeparator() +
-                "-------- Купить молоко" + System.lineSeparator() +
-                "Покормить собаку" + System.lineSeparator();
+        String expected = "Сходить в магазин" + System.lineSeparator()
+                + "---- Купить продукты" + System.lineSeparator()
+                + "-------- Купить хлеб" + System.lineSeparator()
+                + "-------- Купить молоко" + System.lineSeparator()
+                + "Покормить собаку" + System.lineSeparator();
         assertEquals(expected, mem.toString());
         System.setOut(oldOut);
     }
