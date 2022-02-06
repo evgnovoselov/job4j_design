@@ -1,4 +1,4 @@
-package ru.job4j.ood.dip.sample;
+package ru.job4j.ood.dip.badsample;
 
 import java.util.Objects;
 
