@@ -43,16 +43,16 @@ public class TODOAppTest {
         todo.add("Раздел продукты", "Сверстать раздел продуктов");
         todo.add("Раздел продукты", "Сверстать карточку продукта");
         todo.forEach(item -> System.out.printf("%s %s%n", item.getNumber(), item.getName()));
-        String expected = "1. Разработать сайт" + System.lineSeparator() +
-                "1.1. Раздел блог" + System.lineSeparator() +
-                "1.1.1. Сверстать раздел блога" + System.lineSeparator() +
-                "1.1.1.1. Сверстать шапку блога" + System.lineSeparator() +
-                "1.1.1.2. Сверстать подвал блога" + System.lineSeparator() +
-                "1.1.2. Запрограммировать блог" + System.lineSeparator() +
-                "1.2. Раздел продукты" + System.lineSeparator() +
-                "1.2.1. Сверстать раздел продуктов" + System.lineSeparator() +
-                "1.2.2. Сверстать карточку продукта" + System.lineSeparator() +
-                "2. Отправить платежки на оплату" + System.lineSeparator();
+        String expected = "1. Разработать сайт" + System.lineSeparator()
+                + "1.1. Раздел блог" + System.lineSeparator()
+                + "1.1.1. Сверстать раздел блога" + System.lineSeparator()
+                + "1.1.1.1. Сверстать шапку блога" + System.lineSeparator()
+                + "1.1.1.2. Сверстать подвал блога" + System.lineSeparator()
+                + "1.1.2. Запрограммировать блог" + System.lineSeparator()
+                + "1.2. Раздел продукты" + System.lineSeparator()
+                + "1.2.1. Сверстать раздел продуктов" + System.lineSeparator()
+                + "1.2.2. Сверстать карточку продукта" + System.lineSeparator()
+                + "2. Отправить платежки на оплату" + System.lineSeparator();
         assertEquals(expected, mem.toString());
         System.setOut(oldOut);
     }
@@ -74,16 +74,16 @@ public class TODOAppTest {
         todo.add("Раздел продукты", "Сверстать раздел продуктов");
         todo.add("Раздел продукты", "Сверстать карточку продукта");
         new LineMenuConsolePrinter().print(todo.getTasks());
-        String expected = "Разработать сайт" + System.lineSeparator() +
-                "---- Раздел блог" + System.lineSeparator() +
-                "-------- Сверстать раздел блога" + System.lineSeparator() +
-                "------------ Сверстать шапку блога" + System.lineSeparator() +
-                "------------ Сверстать подвал блога" + System.lineSeparator() +
-                "-------- Запрограммировать блог" + System.lineSeparator() +
-                "---- Раздел продукты" + System.lineSeparator() +
-                "-------- Сверстать раздел продуктов" + System.lineSeparator() +
-                "-------- Сверстать карточку продукта" + System.lineSeparator() +
-                "Отправить платежки на оплату" + System.lineSeparator();
+        String expected = "Разработать сайт" + System.lineSeparator()
+                + "---- Раздел блог" + System.lineSeparator()
+                + "-------- Сверстать раздел блога" + System.lineSeparator()
+                + "------------ Сверстать шапку блога" + System.lineSeparator()
+                + "------------ Сверстать подвал блога" + System.lineSeparator()
+                + "-------- Запрограммировать блог" + System.lineSeparator()
+                + "---- Раздел продукты" + System.lineSeparator()
+                + "-------- Сверстать раздел продуктов" + System.lineSeparator()
+                + "-------- Сверстать карточку продукта" + System.lineSeparator()
+                + "Отправить платежки на оплату" + System.lineSeparator();
         assertEquals(expected, mem.toString());
         System.setOut(oldOut);
     }
