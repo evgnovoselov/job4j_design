@@ -1,32 +1,29 @@
 package ru.job4j.menu;
 
-public class TODOApp {
-    private final Menu menu;
-    private MenuPrinter printer;
+import java.util.Iterator;
+
+public class TODOApp implements Iterable<Menu.MenuItemInfo> {
+    private final Menu tasks;
 
     public TODOApp() {
         this(new SimpleMenu());
     }
 
-    public TODOApp(Menu menu) {
-        this(menu, new NumberConsolePrinter());
-    }
-
-    public TODOApp(Menu menu, MenuPrinter printer) {
-        this.menu = menu;
-        this.printer = printer;
-    }
-
-    public void setPrinter(MenuPrinter printer) {
-        this.printer = printer;
+    public TODOApp(Menu tasks) {
+        this.tasks = tasks;
     }
 
     public boolean add(String parentName, String childName) {
-        return menu.add(parentName, childName, () -> {
+        return tasks.add(parentName, childName, () -> {
         });
     }
 
-    public void print() {
-        printer.print(menu);
+    public Menu getTasks() {
+        return tasks;
+    }
+
+    @Override
+    public Iterator<Menu.MenuItemInfo> iterator() {
+        return tasks.iterator();
     }
 }
