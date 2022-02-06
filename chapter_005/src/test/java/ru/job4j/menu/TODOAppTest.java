@@ -11,8 +11,8 @@ public class TODOAppTest {
     @Test
     public void add() {
         TODOApp todo = new TODOApp();
-        assertTrue(todo.add(TODOApp.ROOT, "Разработать сайт"));
-        assertTrue(todo.add(TODOApp.ROOT, "Отправить платежки на оплату"));
+        assertTrue(todo.add(Menu.ROOT, "Разработать сайт"));
+        assertTrue(todo.add(Menu.ROOT, "Отправить платежки на оплату"));
         assertTrue(todo.add("Разработать сайт", "Раздел блог"));
         assertTrue(todo.add("Раздел блог", "Сверстать раздел блога"));
         assertTrue(todo.add("Раздел блог", "Запрограммировать блог"));
