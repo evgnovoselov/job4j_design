@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Данный класс нарушает принцип SRP. Потому что предоставляет как саму модель заказа, так и методы для работы с ней.
+ * Так же нарушает принцип DIP из-за того что использует базу в памяти, а не обстракцию. Хранилище заказа нужно
+ * выделить в интерфейс и реализовать сервис заказа, зависящий от него.
+ */
 public class Order {
     private int id;
     private boolean isPayed;
@@ -19,7 +24,8 @@ public class Order {
     public boolean remove(int id) {
         return products.remove(id) != null;
     }
-    public void clear(){
+
+    public void clear() {
         products.clear();
     }
 
@@ -41,8 +47,12 @@ public class Order {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Order order = (Order) o;
         return id == order.id;
     }

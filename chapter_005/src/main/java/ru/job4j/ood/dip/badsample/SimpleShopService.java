@@ -5,6 +5,12 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Данный класс нарушает принцип инвесии зависимости во многих местах, реализации базы данных и работы с ней,
+ * базу данных нужно выделить в абстракцию.
+ * Происходит вывод в консоль, а не в абстрактный логгер.
+ *
+ */
 public class SimpleShopService {
     private final HashMap<User, Set<Order>> serviceDB = new HashMap<>();
 
