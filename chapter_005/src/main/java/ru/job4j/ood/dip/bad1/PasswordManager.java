@@ -4,6 +4,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Set;
 
+/**
+ * Данный класс нарушает принцип инверсии зависимости (DIP), тем что он привязан к реализации хранилища в памяти.
+ * В данном классе нужно использовать абстракцию хранилища. Так же наблюдается нарушение принципа SRP в кодировщике
+ * пароля, методы кодировки и раскодировке можно было выделить в отдельный интерфейс и создать сервис по кодировке.
+ */
 public class PasswordManager {
     private final MemoryPasswordStorage storage = new MemoryPasswordStorage();
     private final String salt = "IEasySalt";
