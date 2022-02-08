@@ -54,6 +54,7 @@ public class SimpleMenu implements Menu {
             ItemInfo itemInfo = it.next();
             if (itemInfo.menuItem.getName().equals(name)) {
                 foundItem = itemInfo;
+                break;
             }
         }
         return Optional.ofNullable(foundItem);
