@@ -42,7 +42,6 @@ public class TODOAppTest {
         todo.add("Разработать сайт", "Раздел продукты");
         todo.add("Раздел продукты", "Сверстать раздел продуктов");
         todo.add("Раздел продукты", "Сверстать карточку продукта");
-        todo.forEach(item -> System.out.printf("%s %s%n", item.getNumber(), item.getName()));
         String expected = "1. Разработать сайт" + System.lineSeparator()
                 + "1.1. Раздел блог" + System.lineSeparator()
                 + "1.1.1. Сверстать раздел блога" + System.lineSeparator()

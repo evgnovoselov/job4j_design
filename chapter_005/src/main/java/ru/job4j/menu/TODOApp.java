@@ -1,8 +1,6 @@
 package ru.job4j.menu;
 
-import java.util.Iterator;
-
-public class TODOApp implements Iterable<Menu.MenuItemInfo> {
+public class TODOApp {
     private final Menu tasks;
 
     public TODOApp() {
@@ -20,10 +18,5 @@ public class TODOApp implements Iterable<Menu.MenuItemInfo> {
 
     public Menu getTasks() {
         return tasks;
-    }
-
-    @Override
-    public Iterator<Menu.MenuItemInfo> iterator() {
-        return tasks.iterator();
     }
 }
