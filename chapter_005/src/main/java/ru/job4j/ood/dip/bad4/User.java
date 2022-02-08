@@ -1,4 +1,4 @@
-package ru.job4j.ood.dip.bad3;
+package ru.job4j.ood.dip.bad4;
 
 import java.util.Objects;
 
