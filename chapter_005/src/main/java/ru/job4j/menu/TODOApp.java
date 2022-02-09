@@ -62,7 +62,7 @@ public class TODOApp {
             parentTaskName = Menu.ROOT;
         }
         if (!taskName.isBlank()) {
-            ActionDelegate actionDelegate = new ConsoleAction(scanner);
+            ActionDelegate actionDelegate = new ConsoleOutAction(scanner);
             addTask = tasks.add(parentTaskName, taskName, actionDelegate);
         }
         if (addTask) {
@@ -84,10 +84,10 @@ public class TODOApp {
         System.out.print("Выберите действие: ");
     }
 
-    private static class ConsoleAction implements ActionDelegate {
+    private static class ConsoleOutAction implements ActionDelegate {
         private final String text;
 
-        public ConsoleAction(Scanner scanner) {
+        public ConsoleOutAction(Scanner scanner) {
             System.out.print("Введите, что вывести при выборе задачи: ");
             text = scanner.nextLine();
         }
