@@ -45,7 +45,7 @@ public class TODOApp {
         if (parentTaskName.isBlank()) {
             parentTaskName = Menu.ROOT;
         }
-        if (tasks.add(parentTaskName, taskName, System.out::println)) {
+        if (tasks.add(parentTaskName, taskName, () -> System.out.println("Что-то делаем."))) {
             System.out.println("Задача успешно создана.");
         } else {
             System.out.println("Не удалось добавить задачу!");
