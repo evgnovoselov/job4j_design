@@ -27,4 +27,10 @@ public class ControlQuality {
             }
         }
     }
+
+    /**
+     * Запуск перераспределения продуктов.
+     */
+    public void resort() {
+    }
 }
