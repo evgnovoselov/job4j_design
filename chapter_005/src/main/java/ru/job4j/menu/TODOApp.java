@@ -42,10 +42,10 @@ public class TODOApp {
     private static void addTaskTo(Menu tasks, Scanner scanner) {
         System.out.println(CONSOLE_SPLIT_LINE);
         System.out.println("Добавление новой задачи");
-        System.out.print("Введите имя родительской задачи: ");
-        String parentTaskName = scanner.nextLine();
         System.out.print("Введите имя задачи: ");
         String taskName = scanner.nextLine();
+        System.out.print("Введите имя родительской задачи: ");
+        String parentTaskName = scanner.nextLine();
         if (parentTaskName.isBlank()) {
             parentTaskName = Menu.ROOT;
         }
