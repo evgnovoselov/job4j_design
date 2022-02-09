@@ -50,10 +50,8 @@ public class TODOApp {
         System.out.println(CONSOLE_SPLIT_LINE);
     }
 
-    /**
-     * TODO Выбор действия для задачи.
-     */
     private static void addTaskTo(Menu tasks, Scanner scanner) {
+        boolean addTask = false;
         System.out.println(CONSOLE_SPLIT_LINE);
         System.out.println("Добавление новой задачи");
         System.out.print("Введите имя задачи: ");
@@ -63,9 +61,14 @@ public class TODOApp {
         if (parentTaskName.isBlank()) {
             parentTaskName = Menu.ROOT;
         }
-        if (!taskName.isBlank() && tasks.add(parentTaskName, taskName, () -> System.out.println("Что-то делаем."))) {
+        if (!taskName.isBlank()) {
+            ActionDelegate actionDelegate = new ConsoleAction(scanner);
+            addTask = tasks.add(parentTaskName, taskName, actionDelegate);
+        }
+        if (addTask) {
             System.out.println("Задача успешно создана.");
-        } else {
+        }
+        if (taskName.isBlank() || !addTask) {
             System.out.println("Не удалось добавить задачу!");
         }
         System.out.println(CONSOLE_SPLIT_LINE);
@@ -79,5 +82,19 @@ public class TODOApp {
         System.out.printf("| %-41s |%n", "0. Выйти из программы");
         System.out.println(CONSOLE_SPLIT_LINE);
         System.out.print("Выберите действие: ");
+    }
+
+    private static class ConsoleAction implements ActionDelegate {
+        private final String text;
+
+        public ConsoleAction(Scanner scanner) {
+            System.out.print("Введите, что вывести при выборе задачи: ");
+            text = scanner.nextLine();
+        }
+
+        @Override
+        public void delegate() {
+            System.out.println(text);
+        }
     }
 }
