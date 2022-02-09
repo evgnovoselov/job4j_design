@@ -18,11 +18,15 @@ public class TODOApp {
             if (action == 2) {
                 addTaskTo(tasks, scanner);
             }
+            if (action == 3) {
+                addTaskTo(tasks, scanner);
+            }
         } while (action != 0);
     }
 
     private static int getAction(Scanner scanner) {
-        return Integer.parseInt(scanner.nextLine());
+        String number = scanner.nextLine();
+        return number.isBlank() ? -1 : Integer.parseInt(number);
     }
 
     private static void showTasks(Menu tasks) {
@@ -45,7 +49,7 @@ public class TODOApp {
         if (parentTaskName.isBlank()) {
             parentTaskName = Menu.ROOT;
         }
-        if (tasks.add(parentTaskName, taskName, () -> System.out.println("Что-то делаем."))) {
+        if (!taskName.isBlank() && tasks.add(parentTaskName, taskName, () -> System.out.println("Что-то делаем."))) {
             System.out.println("Задача успешно создана.");
         } else {
             System.out.println("Не удалось добавить задачу!");
