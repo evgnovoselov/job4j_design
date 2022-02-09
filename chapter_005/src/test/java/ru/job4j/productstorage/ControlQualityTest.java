@@ -108,6 +108,59 @@ public class ControlQualityTest {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Проверяем работу метода перераспределения продуктов.
+     */
+    @Test
+    public void whenFoodsResortThenChangeStorages() {
+        List<String> expected;
+        List<String> actual;
+        List<? extends Food> foods = new ArrayList<>(List.of(
+                new Seafood("Креветки",
+                        LocalDate.now().minusDays(20),
+                        LocalDate.now().plusDays(50),
+                        100),
+                new Seafood("Форель",
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(50),
+                        100),
+                new Chips("Чипсы Принглс",
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(50),
+                        100),
+                new Chocolate("Конфеты",
+                        LocalDate.now().minusDays(20),
+                        LocalDate.now().plusDays(50),
+                        100),
+                new Chocolate("Сникерс",
+                        LocalDate.now().minusDays(10),
+                        LocalDate.now().plusDays(50),
+                        100),
+                new Fruit("Яблоки",
+                        LocalDate.now().minusDays(60),
+                        LocalDate.now().plusDays(20),
+                        100)
+        ));
+        Storage warehouse = new Warehouse();
+        Storage shop = new Shop();
+        Storage trash = new Trash();
+        List<Storage> storages = List.of(warehouse, shop, trash);
+        ControlQuality controlQuality = new ControlQuality(storages);
+        foods.forEach(controlQuality::distributeFood);
+        warehouse.getFoods().stream().skip(1).forEach(food -> food.setExpiryDate(food.getExpiryDate().minusDays(45)));
+        shop.getFoods().stream().skip(1).forEach(food -> food.setExpiryDate(food.getExpiryDate().minusDays(45)));
+        controlQuality.resort();
+        expected = List.of("Форель : 16 : 0%");
+        actual = getFormattedFoods(warehouse);
+        assertEquals(expected, actual);
+        expected = List.of("Чипсы Принглс : 66 : 0%", "Сникерс : 66 : 0%", "Креветки : 28 : 0%", "Конфеты : 80 : 10%");
+        actual = getFormattedFoods(shop);
+        assertEquals(expected, actual);
+        expected = List.of();
+        actual = getFormattedFoods(trash);
+        assertEquals(expected, actual);
+    }
+
     private List<String> getFormattedFoods(Storage storage) {
         return storage.getFoods().stream()
                 .map(food -> String.format("%s : %s : %s%%",
