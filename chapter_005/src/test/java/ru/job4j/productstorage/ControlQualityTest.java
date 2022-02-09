@@ -147,29 +147,17 @@ public class ControlQualityTest {
         List<Storage> storages = List.of(warehouse, shop, trash);
         ControlQuality controlQuality = new ControlQuality(storages);
         foods.forEach(controlQuality::distributeFood);
-        expected = List.of("Форель : 16 : 0%", "Чипсы Принглс : 16 : 0%", "Сникерс : 16 : 0%");
+        warehouse.getFoods().stream().skip(1).forEach(food -> food.setExpiryDate(food.getExpiryDate().minusDays(45)));
+        shop.getFoods().stream().skip(1).forEach(food -> food.setExpiryDate(food.getExpiryDate().minusDays(45)));
+        controlQuality.resort();
+        expected = List.of("Форель : 16 : 0%");
         actual = getFormattedFoods(warehouse);
         assertEquals(expected, actual);
-        expected = List.of("Креветки : 28 : 0%", "Конфеты : 28 : 0%", "Яблоки : 75 : 10%");
+        expected = List.of("Чипсы Принглс : 66 : 0%", "Сникерс : 66 : 0%", "Креветки : 28 : 0%", "Конфеты : 80 : 10%");
         actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
         expected = List.of();
         actual = getFormattedFoods(trash);
-        assertEquals(expected, actual);
-        warehouse.getFoods().stream().skip(1).forEach(food -> food.setExpiryDate(food.getExpiryDate().minusDays(45)));
-        shop.getFoods().stream().skip(1).forEach(food -> food.setExpiryDate(food.getExpiryDate().minusDays(45)));
-        expected = List.of("Форель : 16 : 0%", "Чипсы Принглс : 66 : 0%", "Сникерс : 66 : 0%");
-        actual = getFormattedFoods(warehouse);
-        assertEquals(expected, actual);
-        expected = List.of("Креветки : 28 : 0%", "Конфеты : 80 : 0%", "Яблоки : 171 : 10%");
-        actual = getFormattedFoods(shop);
-        controlQuality.resort();
-        assertEquals(expected, actual);
-        expected = List.of("Форель : 16 : 0%", "Чипсы Принглс : 66 : 0%", "Сникерс : 66 : 0%");
-        actual = getFormattedFoods(warehouse);
-        assertEquals(expected, actual);
-        expected = List.of("Креветки : 28 : 0%", "Конфеты : 80 : 0%", "Чипсы Принглс : 66 : 0%", "Сникерс : 66 : 0%");
-        actual = getFormattedFoods(shop);
         assertEquals(expected, actual);
     }
 
