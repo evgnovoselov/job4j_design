@@ -1,5 +1,6 @@
 package ru.job4j.menu;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class TODOApp {
@@ -19,9 +20,22 @@ public class TODOApp {
                 addTaskTo(tasks, scanner);
             }
             if (action == 3) {
-                addTaskTo(tasks, scanner);
+                selectDoAction(tasks, scanner);
             }
         } while (action != 0);
+    }
+
+    private static void selectDoAction(Menu tasks, Scanner scanner) {
+        System.out.println(CONSOLE_SPLIT_LINE);
+        System.out.print("Введите название задачи, для запуска действия: ");
+        String taskName = scanner.nextLine();
+        Optional<Menu.MenuItemInfo> itemInfo = tasks.select(taskName);
+        if (itemInfo.isEmpty()) {
+            System.out.println("Данной задачи не существует");
+        } else {
+            itemInfo.get().getActionDelegate().delegate();
+        }
+        System.out.println(CONSOLE_SPLIT_LINE);
     }
 
     private static int getAction(Scanner scanner) {
